@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Details - TRUE Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+        }
+        .sidebar a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            display: block;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .loan-info {
+            border-left: 4px solid #0d6efd;
+            padding-left: 15px;
+            margin-bottom: 20px;
+        }
+        .loan-status-badge {
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+        }
+        .progress {
+            height: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">TRUE Bank</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar py-3 d-md-block bg-dark">
+                <div class="text-center mb-4">
+                    <img src="https://via.placeholder.com/80" alt="Profile" class="rounded-circle">
+                    <h6 class="text-white mt-2" th:text="${user.firstName + ' ' + user.lastName}">User Name</h6>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/dashboard">
+                            <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/accounts">
+                            <i class="bi bi-wallet2 me-2"></i> My Accounts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/transactions">
+                            <i class="bi bi-arrow-left-right me-2"></i> Transactions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/transfer">
+                            <i class="bi bi-send me-2"></i> Fund Transfer
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/user/loans">
+                            <i class="bi bi-cash-coin me-2"></i> Loans
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/profile">
+                            <i class="bi bi-person-circle me-2"></i> Profile
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Loan Details</h2>
+                    <a href="/user/loans" class="btn btn-outline-primary">
+                        <i class="bi bi-arrow-left me-2"></i> Back to Loans
+                    </a>
+                </div>
+
+                <!-- Loan Summary -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0" th:text="${loan.loanType}">Personal Loan</h5>
+                        <span class="badge loan-status-badge" 
+                              th:classappend="${loan.loanStatus == 'APPROVED' ? 'bg-success' : (loan.loanStatus == 'PENDING' ? 'bg-warning' : (loan.loanStatus == 'DISBURSED' ? 'bg-info' : 'bg-danger'))}"
+                              th:text="${loan.loanStatus}">APPROVED</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="loan-info">
+                                    <h6>Loan ID</h6>
+                                    <p class="mb-0" th:text="${loan.id}">12345</p>
+                                </div>
+                                <div class="loan-info">
+                                    <h6>Loan Amount</h6>
+                                    <p class="mb-0 fs-4 fw-bold" th:text="${'₹ ' + #numbers.formatDecimal(loan.amount, 0, 'COMMA', 2, 'POINT')}">₹ 100,000.00</p>
+                                </div>
+                                <div class="loan-info">
+                                    <h6>Interest Rate</h6>
+                                    <p class="mb-0" th:text="${loan.interestRate + '%'}">8.5%</p>
+                                </div>
+                                <div class="loan-info">
+                                    <h6>Term</h6>
+                                    <p class="mb-0" th:text="${loan.termMonths + ' months'}">36 months</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="loan-info">
+                                    <h6>CIBIL Score</h6>
+                                    <p class="mb-0" th:text="${loan.cibilScore}">750</p>
+                                </div>
+                                <div class="loan-info">
+                                    <h6>Application Date</h6>
+                                    <p class="mb-0" th:text="${#temporals.format(loan.applicationDate, 'dd MMM yyyy')}">01 Jan 2023</p>
+                                </div>
+                                <div class="loan-info" th:if="${loan.approvalDate != null}">
+                                    <h6>Approval Date</h6>
+                                    <p class="mb-0" th:text="${#temporals.format(loan.approvalDate, 'dd MMM yyyy')}">15 Jan 2023</p>
+                                </div>
+                                <div class="loan-info" th:if="${loan.remarks != null && !loan.remarks.isEmpty()}">
+                                    <h6>Remarks</h6>
+                                    <p class="mb-0" th:text="${loan.remarks}">Loan approved as per policy</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Repayment Status -->
+                <div class="card mb-4" th:if="${loan.loanStatus == 'DISBURSED'}">
+                    <div class="card-header">
+                        <h5 class="mb-0">Repayment Status</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="mb-0">Repayment Progress</h6>
+                                <span th:text="${#numbers.formatPercent(loan.repaidAmount.divide(loan.amount, 2), 1, 2)}">25%</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" 
+                                     th:style="'width: ' + ${#numbers.formatPercent(loan.repaidAmount.divide(loan.amount, 2), 1, 0)} + ';'" 
+                                     style="width: 25%"></div>
+                            </div>
+                        </div>
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">Total Amount</h6>
+                                        <p class="card-text fs-5 fw-bold" th:text="${'₹ ' + #numbers.formatDecimal(loan.amount, 0, 'COMMA', 2, 'POINT')}">₹ 100,000.00</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">Repaid Amount</h6>
+                                        <p class="card-text fs-5 fw-bold" th:text="${'₹ ' + #numbers.formatDecimal(loan.repaidAmount, 0, 'COMMA', 2, 'POINT')}">₹ 25,000.00</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">Remaining Amount</h6>
+                                        <p class="card-text fs-5 fw-bold" th:text="${'₹ ' + #numbers.formatDecimal(remainingAmount, 0, 'COMMA', 2, 'POINT')}">₹ 75,000.00</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Repayment Form -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Make a Repayment</h6>
+                            </div>
+                            <div class="card-body">
+                                <form th:action="@{'/api/user/loans/' + ${loan.id} + '/repay'}" method="post" id="repaymentForm">
+                                    <div class="alert alert-success d-none" id="successAlert"></div>
+                                    <div class="alert alert-danger d-none" id="errorAlert"></div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="accountId" class="form-label">Select Account</label>
+                                        <select class="form-select" id="accountId" name="accountId" required>
+                                            <option value="" selected disabled>Select an account</option>
+                                            <option th:each="account : ${accounts}" 
+                                                    th:value="${account.id}" 
+                                                    th:text="${account.accountType + ' - ' + account.accountNumber + ' (Balance: ₹' + #numbers.formatDecimal(account.balance, 0, 'COMMA', 2, 'POINT') + ')'}">
+                                                Savings - TRUE0010001 (Balance: ₹10,000.00)
+                                            </option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="amount" class="form-label">Amount</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text">₹</span>
+                                            <input type="number" class="form-control" id="amount" name="amount" min="1" max="9999999" step="0.01" required>
+                                        </div>
+                                        <div class="form-text">Maximum repayment amount is the remaining balance of the loan.</div>
+                                    </div>
+                                    
+                                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="bi bi-cash-coin me-2"></i> Make Payment
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loan Status Messages -->
+                <div class="card mb-4" th:if="${loan.loanStatus == 'PENDING'}">
+                    <div class="card-body">
+                        <div class="alert alert-warning">
+                            <h5><i class="bi bi-info-circle me-2"></i> Your loan application is under review</h5>
+                            <p class="mb-0">We are currently reviewing your loan application. This usually takes 1-2 business days. You will be notified once a decision is made.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4" th:if="${loan.loanStatus == 'REJECTED'}">
+                    <div class="card-body">
+                        <div class="alert alert-danger">
+                            <h5><i class="bi bi-exclamation-triangle me-2"></i> Your loan application was not approved</h5>
+                            <p>We regret to inform you that your loan application could not be approved at this time.</p>
+                            <p class="mb-0" th:if="${loan.remarks != null && !loan.remarks.isEmpty()}" th:text="'Reason: ' + ${loan.remarks}">Reason: Income verification failed</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4" th:if="${loan.loanStatus == 'APPROVED' && loan.loanStatus != 'DISBURSED'}">
+                    <div class="card-body">
+                        <div class="alert alert-success">
+                            <h5><i class="bi bi-check-circle me-2"></i> Your loan application has been approved!</h5>
+                            <p class="mb-0">Congratulations! Your loan application has been approved and is ready for disbursement. The funds will be transferred to your account soon.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-4" th:if="${loan.loanStatus == 'CLOSED'}">
+                    <div class="card-body">
+                        <div class="alert alert-info">
+                            <h5><i class="bi bi-trophy me-2"></i> Loan Fully Repaid</h5>
+                            <p class="mb-0">Congratulations! You have successfully repaid this loan in full.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const repaymentForm = document.getElementById('repaymentForm');
+            
+            if (repaymentForm) {
+                repaymentForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    const accountId = document.getElementById('accountId').value;
+                    const amount = document.getElementById('amount').value;
+                    const successAlert = document.getElementById('successAlert');
+                    const errorAlert = document.getElementById('errorAlert');
+                    
+                    // Reset alerts
+                    successAlert.classList.add('d-none');
+                    errorAlert.classList.add('d-none');
+                    
+                    // Validate input
+                    if (!accountId) {
+                        errorAlert.textContent = 'Please select an account';
+                        errorAlert.classList.remove('d-none');
+                        return;
+                    }
+                    
+                    if (!amount || amount <= 0) {
+                        errorAlert.textContent = 'Please enter a valid amount';
+                        errorAlert.classList.remove('d-none');
+                        return;
+                    }
+                    
+                    // Get selected account's number
+                    const accountSelect = document.getElementById('accountId');
+                    const selectedOption = accountSelect.options[accountSelect.selectedIndex];
+                    const accountText = selectedOption.text;
+                    const accountNumber = accountText.split(' - ')[1].split(' ')[0];
+                    
+                    // Create request data
+                    const requestData = {
+                        accountNumber: accountNumber,
+                        amount: parseFloat(amount)
+                    };
+                    
+                    // Get the form action URL (API endpoint)
+                    const apiUrl = repaymentForm.getAttribute('action');
+                    
+                    // Get token from localStorage
+                    const token = localStorage.getItem('token');
+                    if (!token) {
+                        errorAlert.textContent = 'Authentication error. Please log in again.';
+                        errorAlert.classList.remove('d-none');
+                        return;
+                    }
+                    
+                    // Make API call
+                    fetch(apiUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer ' + token
+                        },
+                        body: JSON.stringify(requestData)
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(data => {
+                                throw new Error(data.message || 'Failed to process repayment');
+                            });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Show success message
+                        successAlert.textContent = 'Payment successful! The loan has been repaid.';
+                        successAlert.classList.remove('d-none');
+                        
+                        // Reset form
+                        repaymentForm.reset();
+                        
+                        // Reload page after a delay to show updated values
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 2000);
+                    })
+                    .catch(error => {
+                        // Show error message
+                        errorAlert.textContent = error.message || 'An error occurred. Please try again.';
+                        errorAlert.classList.remove('d-none');
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Details - TRUE Bank</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+            color: white;
+        }
+        
+        .sidebar-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-link:hover, .sidebar-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-link i {
+            margin-right: 10px;
+        }
+        
+        .content-area {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="pt-4 pb-3 text-center">
+                    <h5>TRUE Bank</h5>
+                    <p>Welcome, <span class="user-username" th:text="${user.firstName + ' ' + user.lastName}">User</span></p>
+                </div>
+                <hr>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/dashboard">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link active" href="/user/accounts">
+                            <i class="fas fa-credit-card"></i> My Accounts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/transactions">
+                            <i class="fas fa-exchange-alt"></i> Transactions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/transfer">
+                            <i class="fas fa-paper-plane"></i> Fund Transfer
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/statements">
+                            <i class="fas fa-file-invoice"></i> Statements
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/loans">
+                            <i class="fas fa-hand-holding-usd"></i> Loans
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/profile">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item mt-5">
+                        <a class="sidebar-link text-danger logout-btn" href="#">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Account Details</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a href="/user/accounts" class="btn btn-sm btn-outline-secondary me-2">
+                            <i class="fas fa-arrow-left"></i> Back to Accounts
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Account Information -->
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Account Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <th>Account Number:</th>
+                                            <td th:text="${account.accountNumber}" th:data-account-number="${account.accountNumber}">TRUEXX0000</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Account Type:</th>
+                                            <td th:text="${account.accountType}">Savings</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Branch:</th>
+                                            <td th:text="${account.branch.name}">Branch Name</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Branch Code:</th>
+                                            <td th:text="${account.branch.branchCode}">000</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Status:</th>
+                                            <td>
+                                                <span th:if="${account.active}" class="badge bg-success">Active</span>
+                                                <span th:unless="${account.active}" class="badge bg-danger">Inactive</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Created Date:</th>
+                                            <td th:text="${#temporals.format(account.createdAt, 'dd-MM-yyyy')}">01-01-2023</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Account Balance</h5>
+                            </div>
+                            <div class="card-body d-flex flex-column justify-content-center align-items-center text-center py-5">
+                                <h2 class="display-4 mb-4">₹<span th:text="${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')}">0.00</span></h2>
+                                <div class="mt-4">
+                                    <a href="/user/deposit" class="btn btn-success me-2">
+                                        <i class="fas fa-arrow-down me-1"></i> Deposit
+                                    </a>
+                                    <a href="/user/withdraw" class="btn btn-primary">
+                                        <i class="fas fa-arrow-up me-1"></i> Withdraw
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recent Transactions -->
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Recent Transactions</h5>
+                        <a href="/user/statements" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-file-invoice me-1"></i> View All Statements
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Transaction ID</th>
+                                        <th>Date & Time</th>
+                                        <th>Description</th>
+                                        <th>Type</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:if="${transactions.empty}">
+                                        <td colspan="6" class="text-center">No transactions found</td>
+                                    </tr>
+                                    <tr th:each="transaction : ${transactions}">
+                                        <td th:text="${transaction.id}">12345</td>
+                                        <td th:text="${#temporals.format(transaction.transactionDate, 'dd-MM-yyyy HH:mm')}">01-01-2023 12:00</td>
+                                        <td th:text="${transaction.description}">Salary</td>
+                                        <td>
+                                            <span th:if="${transaction.sourceAccount != null && transaction.sourceAccount.id == account.id}" class="badge bg-danger">DEBIT</span>
+                                            <span th:if="${transaction.destinationAccount != null && transaction.destinationAccount.id == account.id}" class="badge bg-success">CREDIT</span>
+                                            <span th:if="${transaction.transactionType == T(com.truebank.model.TransactionType).DEPOSIT}" class="badge bg-success">DEPOSIT</span>
+                                            <span th:if="${transaction.transactionType == T(com.truebank.model.TransactionType).WITHDRAWAL}" class="badge bg-danger">WITHDRAWAL</span>
+                                        </td>
+                                        <td th:text="${'₹' + #numbers.formatDecimal(transaction.amount, 1, 'COMMA', 2, 'POINT')}">₹5,000.00</td>
+                                        <td>
+                                            <span class="badge bg-success">Success</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Deposit Modal -->
+    <div class="modal fade" id="depositModal" tabindex="-1" aria-labelledby="depositModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="depositModalLabel">Deposit Funds</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/api/user/accounts/{accountNumber}/deposit(accountNumber=${account.accountNumber})}" method="post" id="depositForm">
+                        <div class="alert alert-danger d-none" id="depositErrorAlert"></div>
+                        <div class="alert alert-success d-none" id="depositSuccessAlert"></div>
+                        
+                        <div class="mb-3">
+                            <label for="depositAmount" class="form-label">Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" class="form-control" id="depositAmount" name="amount" min="1" step="0.01" required>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="depositDescription" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="depositDescription" name="description" placeholder="Salary, Gift, etc." required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success" id="depositSubmitBtn">Deposit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Withdraw Modal -->
+    <div class="modal fade" id="withdrawModal" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="withdrawModalLabel">Withdraw Funds</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/api/user/accounts/{accountNumber}/withdraw(accountNumber=${account.accountNumber})}" method="post" id="withdrawForm">
+                        <div class="alert alert-danger d-none" id="withdrawErrorAlert"></div>
+                        <div class="alert alert-success d-none" id="withdrawSuccessAlert"></div>
+                        
+                        <div class="mb-3">
+                            <label for="withdrawAmount" class="form-label">Amount</label>
+                            <div class="input-group">
+                                <span class="input-group-text">₹</span>
+                                <input type="number" class="form-control" id="withdrawAmount" name="amount" min="1" step="0.01" required>
+                            </div>
+                            <small class="form-text text-muted">Available Balance: ₹<span th:text="${#numbers.formatDecimal(account.balance, 1, 'COMMA', 2, 'POINT')}">0.00</span></small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="withdrawDescription" class="form-label">Description</label>
+                            <input type="text" class="form-control" id="withdrawDescription" name="description" placeholder="Shopping, Bills, etc." required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="withdrawSubmitBtn">Withdraw</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/auth.js}"></script>
+    <script th:src="@{/js/dashboard-auth.js}"></script>
+    <script th:src="@{/js/account-operations.js}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication status and log it
+            const token = localStorage.getItem('token');
+            const userStr = localStorage.getItem('user');
+            console.log('Authentication status:', {
+                token: token ? 'Present (length: ' + token.length + ')' : 'Missing',
+                user: userStr ? 'Present' : 'Missing'
+            });
+            
+            if (!token) {
+                console.error('No token found in localStorage! Authentication will fail');
+                alert('You appear to be logged out. Please log in again.');
+                window.location.href = '/login?required=true&redirect=' + encodeURIComponent(window.location.pathname);
+                return;
+            }
+            
+            // Get the account details from Thymeleaf variables
+            const accountId = '[[${account.id}]]';
+            const accountNumber = '[[${account.accountNumber}]]';
+            const currentBalance = parseFloat('[[${account.balance}]]');
+            
+            console.log('Account details loaded:', { accountId, accountNumber, currentBalance });
+        });
+    </script>
+</body>
+</html> 

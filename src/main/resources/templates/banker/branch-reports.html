@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch Reports - TRUE Bank</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+            color: white;
+        }
+        
+        .sidebar-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-link:hover, .sidebar-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-link i {
+            margin-right: 10px;
+        }
+        
+        .content-area {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="pt-4 pb-3 text-center">
+                    <h5>TRUE Bank</h5>
+                    <p>Banker Administration</p>
+                </div>
+                <hr>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/dashboard">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/branches">
+                            <i class="fas fa-building"></i> Branches
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/managers">
+                            <i class="fas fa-user-tie"></i> Managers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/users">
+                            <i class="fas fa-users"></i> Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link active" href="/banker/reports">
+                            <i class="fas fa-chart-bar"></i> Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/settings">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                    </li>
+                    <li class="nav-item mt-5">
+                        <a class="sidebar-link text-danger logout-btn" href="#">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Branch Reports</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a href="/banker/reports" class="btn btn-sm btn-outline-secondary me-2">
+                            <i class="fas fa-arrow-left"></i> Back to Reports
+                        </a>
+                        <button type="button" id="exportPdf" class="btn btn-sm btn-outline-primary me-2">
+                            <i class="fas fa-file-pdf"></i> Export PDF
+                        </button>
+                        <button type="button" id="exportExcel" class="btn btn-sm btn-outline-success">
+                            <i class="fas fa-file-excel"></i> Export Excel
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Report Filters -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Report Filters</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="reportForm" class="row g-3">
+                            <div class="col-md-4">
+                                <label for="reportType" class="form-label">Report Type</label>
+                                <select class="form-select" id="reportType" required>
+                                    <option value="" selected disabled>Select report type</option>
+                                    <option value="summary">Branch Summary</option>
+                                    <option value="performance">Branch Performance</option>
+                                    <option value="growth">Branch Growth</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="fromDate" class="form-label">From Date</label>
+                                <input type="date" class="form-control" id="fromDate" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="toDate" class="form-label">To Date</label>
+                                <input type="date" class="form-control" id="toDate" required>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search me-1"></i> Generate Report
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Report Results -->
+                <div id="reportResults" class="d-none">
+                    <!-- Branch Summary Report -->
+                    <div id="summaryReport" class="card mb-4 d-none">
+                        <div class="card-header">
+                            <h5 class="mb-0">Branch Summary Report</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Branch Code</th>
+                                            <th>Branch Name</th>
+                                            <th>Location</th>
+                                            <th>Total Accounts</th>
+                                            <th>Total Balance</th>
+                                            <th>Total Transactions</th>
+                                            <th>Total Loans</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="summaryTableBody">
+                                        <!-- Data will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Branch Performance Report -->
+                    <div id="performanceReport" class="card mb-4 d-none">
+                        <div class="card-header">
+                            <h5 class="mb-0">Branch Performance Report</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <canvas id="performanceChart" width="400" height="200"></canvas>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Branch Code</th>
+                                            <th>Branch Name</th>
+                                            <th>New Accounts</th>
+                                            <th>Transaction Volume</th>
+                                            <th>Transaction Value</th>
+                                            <th>Loan Applications</th>
+                                            <th>Approved Loans</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="performanceTableBody">
+                                        <!-- Data will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Branch Growth Report -->
+                    <div id="growthReport" class="card mb-4 d-none">
+                        <div class="card-header">
+                            <h5 class="mb-0">Branch Growth Report</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-4">
+                                <div class="col-md-12">
+                                    <canvas id="growthChart" width="400" height="200"></canvas>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Branch Code</th>
+                                            <th>Branch Name</th>
+                                            <th>Previous Period</th>
+                                            <th>Current Period</th>
+                                            <th>Growth (%)</th>
+                                            <th>Customer Growth</th>
+                                            <th>Balance Growth</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="growthTableBody">
+                                        <!-- Data will be loaded here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- No Data Message -->
+                <div id="noDataAlert" class="alert alert-info d-none">
+                    No data available for the selected report type and period.
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script th:src="@{/js/auth.js}"></script>
+    <script th:src="@{/js/dashboard-auth.js}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default dates (last 30 days)
+            const today = new Date();
+            const thirtyDaysAgo = new Date();
+            thirtyDaysAgo.setDate(today.getDate() - 30);
+            
+            document.getElementById('toDate').valueAsDate = today;
+            document.getElementById('fromDate').valueAsDate = thirtyDaysAgo;
+            
+            // Report form submission
+            const reportForm = document.getElementById('reportForm');
+            const reportResults = document.getElementById('reportResults');
+            const noDataAlert = document.getElementById('noDataAlert');
+            
+            // Report type elements
+            const summaryReport = document.getElementById('summaryReport');
+            const performanceReport = document.getElementById('performanceReport');
+            const growthReport = document.getElementById('growthReport');
+            
+            reportForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const reportType = document.getElementById('reportType').value;
+                const fromDate = document.getElementById('fromDate').value;
+                const toDate = document.getElementById('toDate').value;
+                
+                if (!reportType || !fromDate || !toDate) {
+                    alert('Please fill all fields');
+                    return;
+                }
+                
+                if (new Date(fromDate) > new Date(toDate)) {
+                    alert('From date cannot be greater than To date');
+                    return;
+                }
+                
+                // Hide all reports
+                reportResults.classList.add('d-none');
+                noDataAlert.classList.add('d-none');
+                summaryReport.classList.add('d-none');
+                performanceReport.classList.add('d-none');
+                growthReport.classList.add('d-none');
+                
+                // API call to fetch report data
+                fetch(`/api/banker/reports/branches?type=${reportType}&fromDate=${fromDate}&toDate=${toDate}`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Failed to fetch report data');
+                        });
+                    }
+                })
+                .then(data => {
+                    // Show report results
+                    reportResults.classList.remove('d-none');
+                    
+                    if (!data || (Array.isArray(data) && data.length === 0) || 
+                        (typeof data === 'object' && Object.keys(data).length === 0)) {
+                        // No data available
+                        noDataAlert.classList.remove('d-none');
+                        return;
+                    }
+                    
+                    // Display appropriate report based on type
+                    if (reportType === 'summary') {
+                        displaySummaryReport(data);
+                    } else if (reportType === 'performance') {
+                        displayPerformanceReport(data);
+                    } else if (reportType === 'growth') {
+                        displayGrowthReport(data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching report:', error);
+                    alert('Error: ' + error.message);
+                });
+            });
+            
+            // Display summary report
+            function displaySummaryReport(data) {
+                summaryReport.classList.remove('d-none');
+                const tableBody = document.getElementById('summaryTableBody');
+                tableBody.innerHTML = '';
+                
+                data.forEach(branch => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${branch.branchCode}</td>
+                        <td>${branch.name}</td>
+                        <td>${branch.city}, ${branch.state}</td>
+                        <td>${branch.totalAccounts}</td>
+                        <td>₹${branch.totalBalance.toLocaleString('en-IN')}</td>
+                        <td>${branch.totalTransactions}</td>
+                        <td>${branch.totalLoans}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // Display performance report
+            function displayPerformanceReport(data) {
+                performanceReport.classList.remove('d-none');
+                const tableBody = document.getElementById('performanceTableBody');
+                tableBody.innerHTML = '';
+                
+                // Prepare chart data
+                const branchNames = data.map(branch => branch.name);
+                const transactionValues = data.map(branch => branch.transactionValue);
+                
+                // Create chart
+                const ctx = document.getElementById('performanceChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: branchNames,
+                        datasets: [{
+                            label: 'Transaction Value (₹)',
+                            data: transactionValues,
+                            backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+                
+                data.forEach(branch => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${branch.branchCode}</td>
+                        <td>${branch.name}</td>
+                        <td>${branch.newAccounts}</td>
+                        <td>${branch.transactionVolume}</td>
+                        <td>₹${branch.transactionValue.toLocaleString('en-IN')}</td>
+                        <td>${branch.loanApplications}</td>
+                        <td>${branch.approvedLoans}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // Display growth report
+            function displayGrowthReport(data) {
+                growthReport.classList.remove('d-none');
+                const tableBody = document.getElementById('growthTableBody');
+                tableBody.innerHTML = '';
+                
+                // Prepare chart data
+                const branchNames = data.map(branch => branch.name);
+                const growthRates = data.map(branch => branch.growthRate);
+                
+                // Create chart
+                const ctx = document.getElementById('growthChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: branchNames,
+                        datasets: [{
+                            label: 'Growth Rate (%)',
+                            data: growthRates,
+                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 2,
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+                
+                data.forEach(branch => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${branch.branchCode}</td>
+                        <td>${branch.name}</td>
+                        <td>₹${branch.previousPeriod.toLocaleString('en-IN')}</td>
+                        <td>₹${branch.currentPeriod.toLocaleString('en-IN')}</td>
+                        <td>${branch.growthRate.toFixed(2)}%</td>
+                        <td>${branch.customerGrowth}</td>
+                        <td>₹${branch.balanceGrowth.toLocaleString('en-IN')}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            }
+            
+            // PDF Export
+            document.getElementById('exportPdf').addEventListener('click', function() {
+                const reportType = document.getElementById('reportType').value;
+                const fromDate = document.getElementById('fromDate').value;
+                const toDate = document.getElementById('toDate').value;
+                
+                if (!reportType || !fromDate || !toDate) {
+                    alert('Please generate a report first');
+                    return;
+                }
+                
+                window.open(`/api/banker/reports/branches/pdf?type=${reportType}&fromDate=${fromDate}&toDate=${toDate}`, '_blank');
+            });
+            
+            // Excel Export
+            document.getElementById('exportExcel').addEventListener('click', function() {
+                const reportType = document.getElementById('reportType').value;
+                const fromDate = document.getElementById('fromDate').value;
+                const toDate = document.getElementById('toDate').value;
+                
+                if (!reportType || !fromDate || !toDate) {
+                    alert('Please generate a report first');
+                    return;
+                }
+                
+                window.location.href = `/api/banker/reports/branches/excel?type=${reportType}&fromDate=${fromDate}&toDate=${toDate}`;
+            });
+        });
+    </script>
+</body>
+</html> 

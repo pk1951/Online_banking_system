@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Loan - TRUE Bank</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+            color: white;
+        }
+        
+        .sidebar-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-link:hover, .sidebar-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-link i {
+            margin-right: 10px;
+        }
+        
+        .content-area {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="pt-4 pb-3 text-center">
+                    <h5>TRUE Bank</h5>
+                    <p>Welcome, <span class="user-username" th:text="${user.firstName + ' ' + user.lastName}">User</span></p>
+                </div>
+                <hr>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/dashboard">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/accounts">
+                            <i class="fas fa-credit-card"></i> My Accounts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/transactions">
+                            <i class="fas fa-exchange-alt"></i> Transactions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/transfer">
+                            <i class="fas fa-paper-plane"></i> Fund Transfer
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/statements">
+                            <i class="fas fa-file-invoice"></i> Statements
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link active" href="/user/loans">
+                            <i class="fas fa-hand-holding-usd"></i> Loans
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/profile">
+                            <i class="fas fa-user"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item mt-5">
+                        <a class="sidebar-link text-danger logout-btn" href="#">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Apply for Loan</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a href="/user/loans" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Loans
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Loan Calculator -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Loan Calculator</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <form id="loanCalculatorForm">
+                                    <div class="mb-3">
+                                        <label for="loanType" class="form-label">Loan Type</label>
+                                        <select class="form-select" id="loanType" required>
+                                            <option value="" selected disabled>Select loan type</option>
+                                            <option value="PERSONAL">Personal Loan</option>
+                                            <option value="HOME">Home Loan</option>
+                                            <option value="CAR">Car Loan</option>
+                                            <option value="EDUCATION">Education Loan</option>
+                                            <option value="BUSINESS">Business Loan</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="loanAmount" class="form-label">Loan Amount (₹)</label>
+                                        <input type="number" class="form-control" id="loanAmount" placeholder="Enter amount" min="10000" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="loanTenure" class="form-label">Loan Tenure (months)</label>
+                                        <input type="number" class="form-control" id="loanTenure" placeholder="Enter tenure" min="6" max="240" required>
+                                    </div>
+                                    
+                                    <div class="mb-3">
+                                        <label for="interestRate" class="form-label">Interest Rate (%)</label>
+                                        <input type="number" class="form-control" id="interestRate" step="0.1" min="1" max="20" readonly>
+                                        <small class="text-muted">Rate will be set based on loan type</small>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-calculator me-1"></i> Calculate EMI
+                                    </button>
+                                </form>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="card h-100">
+                                    <div class="card-body d-flex flex-column justify-content-center align-items-center text-center p-4">
+                                        <h4 class="card-title mb-4">Loan Summary</h4>
+                                        <div id="loanSummary" class="d-none">
+                                            <h2 class="display-4 mb-4">₹<span id="emiAmount">0</span></h2>
+                                            <p class="mb-1">Monthly EMI</p>
+                                            
+                                            <div class="table-responsive mt-4">
+                                                <table class="table table-sm">
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>Principal Amount:</th>
+                                                            <td>₹<span id="principalAmount">0</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Total Interest:</th>
+                                                            <td>₹<span id="totalInterest">0</span></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <th>Total Amount:</th>
+                                                            <td>₹<span id="totalAmount">0</span></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div id="loanSummaryPlaceholder">
+                                            <p class="text-muted">Fill the form and click "Calculate EMI" to see your loan details</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Apply for Loan Form -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Loan Application</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-danger d-none" id="errorAlert"></div>
+                        <div class="alert alert-success d-none" id="successAlert"></div>
+                        
+                        <form id="loanApplicationForm" th:object="${loanRequest}">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="account" class="form-label">Select Account</label>
+                                    <select class="form-select" id="account" name="accountId" required>
+                                        <option value="" selected disabled>Choose account...</option>
+                                        <option th:each="account : ${accounts}" 
+                                                th:value="${account.id}" 
+                                                th:text="${account.accountType + ' - ' + account.accountNumber}">
+                                            Savings - TRUE0010001
+                                        </option>
+                                    </select>
+                                    <small class="text-muted">The loan amount will be deposited to this account</small>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="applicationLoanType" class="form-label">Loan Type</label>
+                                    <select class="form-select" id="applicationLoanType" name="loanType" required>
+                                        <option value="" selected disabled>Select loan type</option>
+                                        <option value="PERSONAL">Personal Loan</option>
+                                        <option value="HOME">Home Loan</option>
+                                        <option value="CAR">Car Loan</option>
+                                        <option value="EDUCATION">Education Loan</option>
+                                        <option value="BUSINESS">Business Loan</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="applicationLoanAmount" class="form-label">Loan Amount (₹)</label>
+                                    <input type="number" class="form-control" id="applicationLoanAmount" name="amount" placeholder="Enter amount" min="10000" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="applicationLoanTenure" class="form-label">Loan Tenure (months)</label>
+                                    <input type="number" class="form-control" id="applicationLoanTenure" name="tenure" placeholder="Enter tenure" min="6" max="240" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="purpose" class="form-label">Purpose of Loan</label>
+                                    <input type="text" class="form-control" id="purpose" name="purpose" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="income" class="form-label">Monthly Income (₹)</label>
+                                    <input type="number" class="form-control" id="income" name="income" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    <label for="additionalDetails" class="form-label">Additional Details</label>
+                                    <textarea class="form-control" id="additionalDetails" name="additionalDetails" rows="3"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="form-check mb-4">
+                                <input class="form-check-input" type="checkbox" id="termsCheckbox" required>
+                                <label class="form-check-label" for="termsCheckbox">
+                                    I agree to the terms and conditions of TRUE Bank's loan policy
+                                </label>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" class="btn btn-secondary me-md-2" onclick="window.location.href='/user/loans'">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-paper-plane me-1"></i> Submit Application
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/auth.js}"></script>
+    <script th:src="@{/js/dashboard-auth.js}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Loan calculator logic
+            const loanCalculatorForm = document.getElementById('loanCalculatorForm');
+            const loanType = document.getElementById('loanType');
+            const loanAmount = document.getElementById('loanAmount');
+            const loanTenure = document.getElementById('loanTenure');
+            const interestRate = document.getElementById('interestRate');
+            
+            const loanSummary = document.getElementById('loanSummary');
+            const loanSummaryPlaceholder = document.getElementById('loanSummaryPlaceholder');
+            const emiAmount = document.getElementById('emiAmount');
+            const principalAmount = document.getElementById('principalAmount');
+            const totalInterest = document.getElementById('totalInterest');
+            const totalAmount = document.getElementById('totalAmount');
+            
+            // Set interest rate based on loan type
+            loanType.addEventListener('change', function() {
+                switch(this.value) {
+                    case 'PERSONAL':
+                        interestRate.value = 12.5;
+                        break;
+                    case 'HOME':
+                        interestRate.value = 8.5;
+                        break;
+                    case 'CAR':
+                        interestRate.value = 9.5;
+                        break;
+                    case 'EDUCATION':
+                        interestRate.value = 7.5;
+                        break;
+                    case 'BUSINESS':
+                        interestRate.value = 14.0;
+                        break;
+                    default:
+                        interestRate.value = '';
+                }
+                
+                // Also update the application form loan type
+                document.getElementById('applicationLoanType').value = this.value;
+            });
+            
+            // Calculate EMI and update summary
+            loanCalculatorForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const p = parseFloat(loanAmount.value);
+                const r = parseFloat(interestRate.value) / 12 / 100; // Monthly interest rate
+                const n = parseInt(loanTenure.value); // Tenure in months
+                
+                if (isNaN(p) || isNaN(r) || isNaN(n)) {
+                    alert('Please fill all fields with valid values');
+                    return;
+                }
+                
+                // EMI calculation formula: P * r * (1 + r)^n / ((1 + r)^n - 1)
+                const emi = p * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+                const total = emi * n;
+                const interest = total - p;
+                
+                // Format numbers
+                const formatNumber = (num) => num.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+                
+                // Update summary
+                emiAmount.textContent = formatNumber(emi);
+                principalAmount.textContent = formatNumber(p);
+                totalInterest.textContent = formatNumber(interest);
+                totalAmount.textContent = formatNumber(total);
+                
+                // Show summary
+                loanSummaryPlaceholder.classList.add('d-none');
+                loanSummary.classList.remove('d-none');
+                
+                // Update application form
+                document.getElementById('applicationLoanAmount').value = p;
+                document.getElementById('applicationLoanTenure').value = n;
+            });
+            
+            // Loan application submission
+            const loanApplicationForm = document.getElementById('loanApplicationForm');
+            const errorAlert = document.getElementById('errorAlert');
+            const successAlert = document.getElementById('successAlert');
+            
+            loanApplicationForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Hide alerts
+                errorAlert.classList.add('d-none');
+                successAlert.classList.add('d-none');
+                
+                // Get form data
+                const formData = {
+                    accountId: document.getElementById('account').value,
+                    loanType: document.getElementById('applicationLoanType').value,
+                    amount: parseFloat(document.getElementById('applicationLoanAmount').value),
+                    tenure: parseInt(document.getElementById('applicationLoanTenure').value),
+                    purpose: document.getElementById('purpose').value,
+                    income: parseFloat(document.getElementById('income').value),
+                    additionalDetails: document.getElementById('additionalDetails').value
+                };
+                
+                // Validate form
+                if (!formData.accountId || !formData.loanType || isNaN(formData.amount) || isNaN(formData.tenure) || !formData.purpose || isNaN(formData.income)) {
+                    errorAlert.textContent = 'Please fill all required fields with valid values';
+                    errorAlert.classList.remove('d-none');
+                    return;
+                }
+                
+                if (!document.getElementById('termsCheckbox').checked) {
+                    errorAlert.textContent = 'Please agree to the terms and conditions';
+                    errorAlert.classList.remove('d-none');
+                    return;
+                }
+                
+                // Send API request
+                fetch('/api/user/loans/apply', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    body: JSON.stringify(formData)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Failed to submit loan application');
+                        });
+                    }
+                })
+                .then(data => {
+                    // Show success message
+                    successAlert.textContent = 'Loan application submitted successfully! Your application is under review.';
+                    successAlert.classList.remove('d-none');
+                    
+                    // Reset form
+                    loanApplicationForm.reset();
+                    
+                    // Hide loan summary
+                    loanSummary.classList.add('d-none');
+                    loanSummaryPlaceholder.classList.remove('d-none');
+                    
+                    // Redirect after delay
+                    setTimeout(() => {
+                        window.location.href = '/user/loans';
+                    }, 3000);
+                })
+                .catch(error => {
+                    // Show error message
+                    errorAlert.textContent = error.message;
+                    errorAlert.classList.remove('d-none');
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

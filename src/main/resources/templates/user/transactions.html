@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - TRUE Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+        }
+        .sidebar a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            display: block;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .transaction-credit {
+            color: #198754;
+        }
+        .transaction-debit {
+            color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">TRUE Bank</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar py-3 d-md-block bg-dark">
+                <div class="text-center mb-4">
+                    <img src="https://via.placeholder.com/80" alt="Profile" class="rounded-circle">
+                    <h6 class="text-white mt-2" th:text="${user.firstName + ' ' + user.lastName}">User Name</h6>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/dashboard">
+                            <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/accounts">
+                            <i class="bi bi-wallet2 me-2"></i> My Accounts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/user/transactions">
+                            <i class="bi bi-arrow-left-right me-2"></i> Transactions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/transfer">
+                            <i class="bi bi-send me-2"></i> Fund Transfer
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/statements">
+                            <i class="bi bi-file-earmark-text me-2"></i> Statements
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/loans">
+                            <i class="bi bi-cash-coin me-2"></i> Loans
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/profile">
+                            <i class="bi bi-person-circle me-2"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item mt-3">
+                        <a class="nav-link" href="/user/deposit">
+                            <i class="bi bi-plus-circle me-2"></i> Deposit
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/withdraw">
+                            <i class="bi bi-dash-circle me-2"></i> Withdraw
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Transaction History</h2>
+                    <a href="/user/transfer" class="btn btn-primary">
+                        <i class="bi bi-send me-2"></i> New Transfer
+                    </a>
+                </div>
+
+                <!-- Error Message -->
+                <div class="alert alert-danger" th:if="${errorMessage != null}" th:text="${errorMessage}">
+                    Error loading transactions data.
+                </div>
+
+                <!-- No Transactions Message -->
+                <div class="alert alert-info" th:if="${transactions.empty}">
+                    <p class="mb-0">You don't have any transactions yet.</p>
+                </div>
+
+                <!-- Transactions Table -->
+                <div class="card" th:if="${!transactions.empty}">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Reference</th>
+                                        <th>Type</th>
+                                        <th>Account</th>
+                                        <th>Description</th>
+                                        <th class="text-end">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="transaction : ${transactions}">
+                                        <td th:text="${#temporals.format(transaction.transactionDate, 'dd MMM yyyy, HH:mm')}">01 Jan 2023, 10:30</td>
+                                        <td th:text="${transaction.referenceNumber}">TRX123456</td>
+                                        <td>
+                                            <span th:if="${transaction.transactionType.name() == 'DEPOSIT'}" class="badge bg-success">Deposit</span>
+                                            <span th:if="${transaction.transactionType.name() == 'WITHDRAWAL'}" class="badge bg-danger">Withdrawal</span>
+                                            <span th:if="${transaction.transactionType.name() == 'TRANSFER'}" class="badge bg-primary">Transfer</span>
+                                            <span th:if="${transaction.transactionType.name() == 'LOAN_DISBURSEMENT'}" class="badge bg-info">Loan</span>
+                                            <span th:if="${transaction.transactionType.name() == 'LOAN_REPAYMENT'}" class="badge bg-warning">Repayment</span>
+                                        </td>
+                                        <td>
+                                            <span th:if="${transaction.sourceAccount != null && transaction.sourceAccount.user.id == user.id}" 
+                                                  th:text="${transaction.sourceAccount.accountNumber + ' (Sent)'}">
+                                                TRUE001001 (Sent)
+                                            </span>
+                                            <span th:if="${transaction.destinationAccount != null && transaction.destinationAccount.user.id == user.id}" 
+                                                  th:text="${transaction.destinationAccount.accountNumber + ' (Received)'}">
+                                                TRUE001001 (Received)
+                                            </span>
+                                        </td>
+                                        <td th:text="${transaction.description}">Salary Credit</td>
+                                        <td class="text-end" 
+                                            th:classappend="${(transaction.transactionType.name() == 'DEPOSIT' || 
+                                                             (transaction.transactionType.name() == 'TRANSFER' && 
+                                                              transaction.destinationAccount != null && 
+                                                              transaction.destinationAccount.user.id == user.id)) ? 
+                                                             'transaction-credit' : 'transaction-debit'}">
+                                            <span th:if="${transaction.transactionType.name() == 'DEPOSIT' || 
+                                                          (transaction.transactionType.name() == 'TRANSFER' && 
+                                                           transaction.destinationAccount != null && 
+                                                           transaction.destinationAccount.user.id == user.id)}">+</span>
+                                            <span th:if="${transaction.transactionType.name() == 'WITHDRAWAL' || 
+                                                          (transaction.transactionType.name() == 'TRANSFER' && 
+                                                           transaction.sourceAccount != null && 
+                                                           transaction.sourceAccount.user.id == user.id) ||
+                                                           transaction.transactionType.name() == 'LOAN_REPAYMENT'}">-</span>
+                                            <span th:text="${'₹' + #numbers.formatDecimal(transaction.amount, 0, 'COMMA', 2, 'POINT')}">₹10,000.00</span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/auth.js}"></script>
+    <script th:src="@{/js/dashboard-auth.js}"></script>
+</body>
+</html>

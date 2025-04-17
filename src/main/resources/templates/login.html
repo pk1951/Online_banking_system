@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - TRUE Bank</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        
+        .login-container {
+            max-width: 450px;
+            margin: 100px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-logo h1 {
+            color: #0d6efd;
+            font-weight: bold;
+        }
+        
+        .form-control {
+            padding: 12px;
+            border-radius: 5px;
+        }
+        
+        .btn-login {
+            padding: 12px;
+            font-weight: bold;
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .cursor-move {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .cursor-move:hover {
+            transform: translateY(-3px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Logo Header -->
+    <div class="text-center py-4 bg-primary">
+        <a href="/" class="text-decoration-none">
+            <h1 class="text-white"><strong>TRUE</strong> Bank</h1>
+        </a>
+    </div>
+
+    <!-- Login Form -->
+    <div class="container">
+        <div class="login-container">
+            <div class="login-logo">
+                <h1>TRUE Bank</h1>
+                <p class="text-muted">Sign in to your account</p>
+            </div>
+            
+            <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                Invalid username or password.
+            </div>
+            <div th:if="${param.logout}" class="alert alert-success" role="alert">
+                You have been logged out.
+            </div>
+            <div th:if="${param.required}" class="alert alert-warning" role="alert">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>Authentication Required:</strong> You must log in as a banker to access branch creation.
+            </div>
+            
+            <form id="loginForm" action="/api/auth/signin" method="post" onsubmit="return handleLogin(event)">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="rememberMe" name="remember-me">
+                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                </div>
+                
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-login cursor-move">Sign In</button>
+                </div>
+            </form>
+            
+            <div class="login-footer">
+                <p><a href="/forgot-password">Forgot password?</a></p>
+                <p>Don't have an account? <a href="/register">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2025 TRUE Bank. All rights reserved.</p>
+            <div>
+                <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/webjars/jquery/3.6.4/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+    
+    <script>
+        function handleLogin(event) {
+            // Prevent the default form submission
+            event.preventDefault();
+            
+            // Get form data
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Create request payload
+            const loginData = {
+                username: username,
+                password: password
+                // Not sending email to simplify authentication
+            };
+            
+            // Send AJAX request
+            fetch('/api/auth/signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    return response.json().then(data => {
+                        throw new Error(data.message || 'Login failed');
+                    });
+                }
+            })
+            .then(data => {
+                console.log('Login successful:', data);
+                // Store token in localStorage
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('user', JSON.stringify({
+                    id: data.id,
+                    username: data.username,
+                    email: data.email,
+                    roles: data.roles
+                }));
+                
+                // Also store token as a cookie
+                document.cookie = `token=${data.token}; path=/; max-age=86400; SameSite=Strict`;
+                
+                // Add token to all future requests
+                const originalFetch = window.fetch;
+                window.fetch = function(url, options = {}) {
+                    options.headers = options.headers || {};
+                    options.headers['Authorization'] = 'Bearer ' + data.token;
+                    return originalFetch(url, options);
+                };
+                
+                // Redirect to the dashboard URL provided by the server
+                console.log('Redirecting to:', data.dashboardUrl || '/user/dashboard');
+                window.location.href = data.dashboardUrl || '/user/dashboard';
+            })
+            .catch(error => {
+                // Display error message
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'alert alert-danger';
+                errorDiv.textContent = error.message;
+                
+                // Remove any existing error messages
+                const existingErrors = document.querySelectorAll('.alert-danger');
+                existingErrors.forEach(el => el.remove());
+                
+                // Insert error message at the top of the form
+                const form = document.getElementById('loginForm');
+                form.insertBefore(errorDiv, form.firstChild);
+            });
+            
+            return false;
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle password visibility
+            const togglePassword = document.getElementById('togglePassword');
+            const password = document.getElementById('password');
+            
+            togglePassword.addEventListener('click', function() {
+                const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+                password.setAttribute('type', type);
+                this.querySelector('i').classList.toggle('fa-eye');
+                this.querySelector('i').classList.toggle('fa-eye-slash');
+            });
+            
+            // Form submission with AJAX
+            const loginForm = document.getElementById('loginForm');
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                const loginData = {
+                    username: username,
+                    password: password
+                };
+                
+                fetch('/api/auth/signin', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Login failed');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Login successful:', data);
+                    // Store token in localStorage
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify({
+                        id: data.id,
+                        username: data.username,
+                        email: data.email,
+                        roles: data.roles
+                    }));
+                    
+                    // Also store token as a cookie
+                    document.cookie = `token=${data.token}; path=/; max-age=86400; SameSite=Strict`;
+                    
+                    // Add token to all future requests
+                    const originalFetch = window.fetch;
+                    window.fetch = function(url, options = {}) {
+                        options.headers = options.headers || {};
+                        options.headers['Authorization'] = 'Bearer ' + data.token;
+                        return originalFetch(url, options);
+                    };
+                    
+                    // Redirect to the dashboard URL provided by the server
+                    console.log('Redirecting to:', data.dashboardUrl || '/user/dashboard');
+                    window.location.href = data.dashboardUrl || '/user/dashboard';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    
+                    // Display error message
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'alert alert-danger';
+                    errorDiv.textContent = error.message || 'Login failed. Please check your credentials.';
+                    
+                    // Remove any existing error messages
+                    const existingErrors = document.querySelectorAll('.alert-danger');
+                    existingErrors.forEach(el => el.remove());
+                    
+                    // Insert error message at the top of the form
+                    const form = document.getElementById('loginForm');
+                    form.insertBefore(errorDiv, form.firstChild);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

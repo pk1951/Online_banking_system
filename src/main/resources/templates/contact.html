@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - TRUE Bank</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .contact-section {
+            padding: 80px 0;
+        }
+        
+        .contact-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+        
+        .contact-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .banker-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 20px;
+            border: 5px solid #f8f9fa;
+        }
+        
+        .contact-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: #0d6efd;
+        }
+        
+        .map-container {
+            height: 400px;
+            margin-top: 50px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .contact-form {
+            background-color: #f8f9fa;
+            padding: 30px;
+            border-radius: 10px;
+            margin-top: 50px;
+        }
+        
+        .branch-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .branch-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <strong>TRUE</strong> Bank
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/contact">Contact Us</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="/login" class="btn btn-outline-light me-2">Login</a>
+                    <a href="/register" class="btn btn-light">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contact Section -->
+    <section class="contact-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2>Contact Us</h2>
+                <p class="lead text-muted">Get in touch with our team for any queries or assistance</p>
+            </div>
+            
+            <!-- Banker Details -->
+            <h3 class="mb-4">Meet Our Bankers</h3>
+            <div class="row">
+                <!-- Main Banker -->
+                <div class="col-md-6 mb-4">
+                    <div class="contact-card text-center">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="TRUE Banker" class="banker-img">
+                        <h4>TRUE Banker</h4>
+                        <p class="text-muted">Chief Banking Officer</p>
+                        <hr>
+                        <p><i class="fas fa-envelope me-2"></i> praveenmunigan@gmail.com</p>
+                        <p><i class="fas fa-phone me-2"></i> +91 9087654321</p>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> PES University EC Campus</p>
+                        <div class="mt-3">
+                            <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="btn btn-outline-primary"><i class="fab fa-facebook"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Branch Manager -->
+                <div class="col-md-6 mb-4">
+                    <div class="contact-card text-center">
+                        <img src="https://randomuser.me/api/portraits/men/41.jpg" alt="Branch Manager" class="banker-img">
+                        <h4>Pavan Kishore N</h4>
+                        <p class="text-muted">Branch Manager</p>
+                        <hr>
+                        <p><i class="fas fa-envelope me-2"></i> pavan.kishore@truebank.com</p>
+                        <p><i class="fas fa-phone me-2"></i> +91 9876543210</p>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> PES University EC Campus</p>
+                        <div class="mt-3">
+                            <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="btn btn-outline-primary"><i class="fab fa-facebook"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Loan Officer -->
+                <div class="col-md-6 mb-4">
+                    <div class="contact-card text-center">
+                        <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="Loan Officer" class="banker-img">
+                        <h4>Rohit Yekkundi</h4>
+                        <p class="text-muted">Loan Officer</p>
+                        <hr>
+                        <p><i class="fas fa-envelope me-2"></i> rohit.yekkundi@truebank.com</p>
+                        <p><i class="fas fa-phone me-2"></i> +91 9765432109</p>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> PES University EC Campus</p>
+                        <div class="mt-3">
+                            <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="btn btn-outline-primary"><i class="fab fa-facebook"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Customer Service Manager -->
+                <div class="col-md-6 mb-4">
+                    <div class="contact-card text-center">
+                        <img src="https://randomuser.me/api/portraits/men/67.jpg" alt="Customer Service Manager" class="banker-img">
+                        <h4>Sharan Sudhesh Surpur</h4>
+                        <p class="text-muted">Customer Service Manager</p>
+                        <hr>
+                        <p><i class="fas fa-envelope me-2"></i> sharan.sudhesh@truebank.com</p>
+                        <p><i class="fas fa-phone me-2"></i> +91 9654321098</p>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> PES University EC Campus</p>
+                        <div class="mt-3">
+                            <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-linkedin"></i></a>
+                            <a href="#" class="btn btn-outline-primary me-2"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="btn btn-outline-primary"><i class="fab fa-facebook"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Information -->
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4">
+                    <div class="contact-card text-center">
+                        <i class="fas fa-phone-alt contact-icon"></i>
+                        <h4>Call Us</h4>
+                        <p>Customer Service: +91 1800 123 4567</p>
+                        <p>Technical Support: +91 1800 987 6543</p>
+                        <p>International: +91 9876543210</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="contact-card text-center">
+                        <i class="fas fa-envelope contact-icon"></i>
+                        <h4>Email Us</h4>
+                        <p>General Inquiries: info@truebank.com</p>
+                        <p>Customer Support: support@truebank.com</p>
+                        <p>Careers: careers@truebank.com</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="contact-card text-center">
+                        <i class="fas fa-clock contact-icon"></i>
+                        <h4>Banking Hours</h4>
+                        <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+                        <p>Saturday: 10:00 AM - 2:00 PM</p>
+                        <p>Sunday: Closed</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Branch Locations -->
+            <h3 class="mb-4 mt-5">Our Branches</h3>
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="branch-card">
+                        <h5>Main Branch - PES University</h5>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> PES University EC Campus, Bangalore</p>
+                        <p><i class="fas fa-phone me-2"></i> +91 80 2345 6789</p>
+                        <p><i class="fas fa-envelope me-2"></i> mainbranch@truebank.com</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="branch-card">
+                        <h5>Electronic City Branch</h5>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> Electronic City Phase 1, Bangalore</p>
+                        <p><i class="fas fa-phone me-2"></i> +91 80 6789 1234</p>
+                        <p><i class="fas fa-envelope me-2"></i> ecity@truebank.com</p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4 mb-4">
+                    <div class="branch-card">
+                        <h5>Whitefield Branch</h5>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> Whitefield, Bangalore</p>
+                        <p><i class="fas fa-phone me-2"></i> +91 80 9876 5432</p>
+                        <p><i class="fas fa-envelope me-2"></i> whitefield@truebank.com</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Form -->
+            <div class="contact-form mt-5">
+                <h3 class="mb-4">Send Us a Message</h3>
+                <form id="contactForm">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" id="subject" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message" class="form-label">Message</label>
+                        <textarea class="form-control" id="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+            
+            <!-- Map -->
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.0408430387697!2d77.66409937473037!3d12.899522887389755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1345bf097e69%3A0x699791c1a1d0f412!2sPES%20University%20Electronic%20City%20Campus!5e0!3m2!1sen!2sin!4v1681729532278!5m2!1sen!2sin" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2025 TRUE Bank. All rights reserved.</p>
+            <div>
+                <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/webjars/jquery/3.6.4/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const contactForm = document.getElementById('contactForm');
+            
+            contactForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                
+                // Get form data
+                const name = document.getElementById('name').value;
+                const email = document.getElementById('email').value;
+                const subject = document.getElementById('subject').value;
+                const message = document.getElementById('message').value;
+                
+                // Here you would normally send the data to a server
+                // For demo purposes, we'll just show an alert
+                alert(`Thank you for your message, ${name}! We will get back to you soon.`);
+                
+                // Reset the form
+                contactForm.reset();
+            });
+        });
+    </script>
+</body>
+</html>

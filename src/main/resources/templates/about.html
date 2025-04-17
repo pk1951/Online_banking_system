@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - TRUE Bank</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .team-member {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .team-member img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 5px solid #f8f9fa;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .team-member h5 {
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .team-member p.text-muted {
+            margin-bottom: 10px;
+        }
+        
+        .team-member .social-icons {
+            margin-top: 15px;
+        }
+        
+        .team-member .social-icons a {
+            color: #6c757d;
+            margin: 0 5px;
+            font-size: 18px;
+            transition: all 0.3s;
+        }
+        
+        .team-member .social-icons a:hover {
+            color: #0d6efd;
+        }
+        
+        .about-section {
+            padding: 80px 0;
+        }
+        
+        .about-heading {
+            margin-bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <strong>TRUE</strong> Bank
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact Us</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="/login" class="btn btn-outline-light me-2">Login</a>
+                    <a href="/register" class="btn btn-light">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="container">
+            <div class="text-center about-heading">
+                <h2>About TRUE Bank</h2>
+                <p class="lead text-muted">Meet the team behind TRUE Bank's innovative online banking system</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-8 mx-auto text-center mb-5">
+                    <p>TRUE Bank's online banking system is a comprehensive solution designed to provide secure, reliable, and innovative banking services to our customers. Our platform offers a wide range of features including account management, transaction processing, and loan applications, all within a user-friendly interface.</p>
+                    <p>This project was developed by a talented team of software engineers from PES University EC Campus as part of their Object-Oriented Analysis and Design course.</p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <!-- Team Member 1 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="team-member">
+                        <img src="https://via.placeholder.com/180" alt="Praveen Kumar M" class="img-fluid">
+                        <h5>Praveen Kumar M</h5>
+                        <p class="text-muted">Software Engineer</p>
+                        <p>PES University EC Campus</p>
+                        <p>Prompt Engineer & Software Techie with expertise in backend development and system architecture.</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="team-member">
+                        <img src="https://via.placeholder.com/180" alt="Pavan Kishore N" class="img-fluid">
+                        <h5>Pavan Kishore N</h5>
+                        <p class="text-muted">Frontend Developer</p>
+                        <p>PES University EC Campus</p>
+                        <p>Specializes in creating intuitive user interfaces and responsive web designs with modern frameworks.</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="team-member">
+                        <img src="https://via.placeholder.com/180" alt="Rohit Yekkundi" class="img-fluid">
+                        <h5>Rohit Yekkundi</h5>
+                        <p class="text-muted">Database Specialist</p>
+                        <p>PES University EC Campus</p>
+                        <p>Expert in database design, optimization, and security implementation for financial applications.</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Team Member 4 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="team-member">
+                        <img src="https://via.placeholder.com/180" alt="Sharan Sudhesh Surpur" class="img-fluid">
+                        <h5>Sharan Sudhesh Surpur</h5>
+                        <p class="text-muted">Security Specialist</p>
+                        <p>PES University EC Campus</p>
+                        <p>Focused on implementing robust security measures and authentication systems for banking applications.</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                            <a href="#"><i class="fab fa-github"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2025 TRUE Bank. All rights reserved.</p>
+            <div>
+                <a href="#" class="text-white me-3"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-white me-3"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>
+</body>
+</html>

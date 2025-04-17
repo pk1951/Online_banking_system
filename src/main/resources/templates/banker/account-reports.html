@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Reports - TRUE Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+        }
+        .sidebar a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            display: block;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">TRUE Bank Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar py-3 d-md-block bg-dark">
+                <div class="text-center mb-4">
+                    <img src="https://via.placeholder.com/80" alt="Admin" class="rounded-circle">
+                    <h6 class="text-white mt-2">Banker Admin</h6>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/banker/dashboard">
+                            <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/banker/branches">
+                            <i class="bi bi-building me-2"></i> Branches
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/banker/managers">
+                            <i class="bi bi-people me-2"></i> Managers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/banker/users">
+                            <i class="bi bi-person me-2"></i> Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/banker/reports">
+                            <i class="bi bi-file-earmark-text me-2"></i> Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/banker/settings">
+                            <i class="bi bi-gear me-2"></i> Settings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/banker/profile">
+                            <i class="bi bi-person-circle me-2"></i> Profile
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Account Reports</h2>
+                    <div>
+                        <button class="btn btn-outline-primary me-2">
+                            <i class="bi bi-file-earmark-pdf me-2"></i> Export PDF
+                        </button>
+                        <button class="btn btn-outline-success">
+                            <i class="bi bi-file-earmark-excel me-2"></i> Export Excel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filter Form -->
+                <div class="card mb-4">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Filter Accounts</h5>
+                    </div>
+                    <div class="card-body">
+                        <form action="/banker/reports/accounts" method="get" class="row g-3">
+                            <div class="col-md-3">
+                                <label for="accountType" class="form-label">Account Type</label>
+                                <select class="form-select" id="accountType" name="accountType">
+                                    <option value="">All Types</option>
+                                    <option value="SAVINGS">Savings</option>
+                                    <option value="CURRENT">Current</option>
+                                    <option value="FIXED_DEPOSIT">Fixed Deposit</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="branchId" class="form-label">Branch</label>
+                                <select class="form-select" id="branchId" name="branchId">
+                                    <option value="">All Branches</option>
+                                    <!-- Add branch options dynamically -->
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="minBalance" class="form-label">Min Balance</label>
+                                <input type="number" class="form-control" id="minBalance" name="minBalance" placeholder="Min Balance">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="maxBalance" class="form-label">Max Balance</label>
+                                <input type="number" class="form-control" id="maxBalance" name="maxBalance" placeholder="Max Balance">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="startDate" class="form-label">Created After</label>
+                                <input type="date" class="form-control" id="startDate" name="startDate">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="endDate" class="form-label">Created Before</label>
+                                <input type="date" class="form-control" id="endDate" name="endDate">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="status" class="form-label">Status</label>
+                                <select class="form-select" id="status" name="status">
+                                    <option value="">All Statuses</option>
+                                    <option value="ACTIVE">Active</option>
+                                    <option value="INACTIVE">Inactive</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary me-2">
+                                    <i class="bi bi-search me-2"></i> Apply Filters
+                                </button>
+                                <button type="reset" class="btn btn-outline-secondary">
+                                    <i class="bi bi-x-circle me-2"></i> Reset
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Account Summary -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-primary text-white h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Total Accounts</h5>
+                                <h2 class="card-text">1,234</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-success text-white h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Savings Accounts</h5>
+                                <h2 class="card-text">856</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-info text-white h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Current Accounts</h5>
+                                <h2 class="card-text">245</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-warning text-dark h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Fixed Deposits</h5>
+                                <h2 class="card-text">133</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accounts Table -->
+                <div class="card">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0">Account List</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Account Number</th>
+                                        <th>Type</th>
+                                        <th>User</th>
+                                        <th>Branch</th>
+                                        <th>Created Date</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Balance</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Sample data, replace with dynamic data -->
+                                    <tr>
+                                        <td>TRUE001001</td>
+                                        <td>Savings</td>
+                                        <td>John Doe</td>
+                                        <td>Main Branch</td>
+                                        <td>01 Jan 2025</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td class="text-end">₹25,000.00</td>
+                                        <td>
+                                            <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>TRUE001002</td>
+                                        <td>Current</td>
+                                        <td>Jane Smith</td>
+                                        <td>City Branch</td>
+                                        <td>15 Jan 2025</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td class="text-end">₹1,50,000.00</td>
+                                        <td>
+                                            <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>TRUE001003</td>
+                                        <td>Fixed Deposit</td>
+                                        <td>Robert Johnson</td>
+                                        <td>North Branch</td>
+                                        <td>05 Feb 2025</td>
+                                        <td><span class="badge bg-success">Active</span></td>
+                                        <td class="text-end">₹5,00,000.00</td>
+                                        <td>
+                                            <a href="#" class="btn btn-sm btn-outline-primary">View</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <nav>
+                            <ul class="pagination justify-content-center mb-0">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#">Previous</a>
+                                </li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">1</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">2</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">3</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

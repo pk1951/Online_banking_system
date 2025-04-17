@@ -1,0 +1,132 @@
+/* Branch Details Page Styling */
+
+.branch-details-container {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.branch-header {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.branch-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.branch-code {
+    font-size: 16px;
+    color: #7f8c8d;
+    font-weight: 500;
+}
+
+.branch-address {
+    margin-bottom: 20px;
+}
+
+.branch-address h5 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #34495e;
+}
+
+.address-details {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.contact-info {
+    margin-bottom: 20px;
+}
+
+.contact-info h5 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #34495e;
+}
+
+.contact-details {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.contact-item i {
+    width: 20px;
+    margin-right: 10px;
+    color: #3498db;
+}
+
+.manager-info {
+    margin-bottom: 20px;
+}
+
+.manager-info h5 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #34495e;
+}
+
+.manager-details {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.branch-status {
+    margin-top: 20px;
+    padding: 10px 15px;
+    border-radius: 5px;
+    display: inline-block;
+    font-weight: 600;
+}
+
+.status-active {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-inactive {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.branch-actions {
+    margin-top: 30px;
+    display: flex;
+    gap: 10px;
+}
+
+.branch-actions .btn {
+    padding: 8px 20px;
+    font-weight: 500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .branch-actions {
+        flex-direction: column;
+    }
+    
+    .branch-actions .btn {
+        margin-bottom: 10px;
+    }
+} 

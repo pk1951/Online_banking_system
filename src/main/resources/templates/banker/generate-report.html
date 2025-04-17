@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Report - TRUE Bank</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+            color: white;
+        }
+        
+        .sidebar-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-link:hover, .sidebar-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-link i {
+            margin-right: 10px;
+        }
+        
+        .content-area {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="pt-4 pb-3 text-center">
+                    <h5>TRUE Bank</h5>
+                    <p>Banker Administration</p>
+                </div>
+                <hr>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/dashboard">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/branches">
+                            <i class="fas fa-building"></i> Branches
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/managers">
+                            <i class="fas fa-user-tie"></i> Managers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/users">
+                            <i class="fas fa-users"></i> Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link active" href="/banker/reports">
+                            <i class="fas fa-chart-bar"></i> Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/settings">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                    </li>
+                    <li class="nav-item mt-5">
+                        <a class="sidebar-link text-danger logout-btn" href="#">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Generate Report</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a href="/banker/reports" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Reports
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Generate Report Form -->
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Report Parameters</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="generateReportForm">
+                            <div class="alert alert-danger d-none" id="errorAlert"></div>
+                            <div class="alert alert-success d-none" id="successAlert"></div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="reportType" class="form-label">Report Type</label>
+                                    <select class="form-select" id="reportType" name="reportType" required>
+                                        <option value="">Select Report Type</option>
+                                        <option value="TRANSACTION">Transaction Report</option>
+                                        <option value="ACCOUNT">Account Report</option>
+                                        <option value="LOAN">Loan Report</option>
+                                        <option value="BRANCH">Branch Report</option>
+                                        <option value="USER">User Report</option>
+                                        <option value="SUMMARY">Summary Report</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="reportFormat" class="form-label">Report Format</label>
+                                    <select class="form-select" id="reportFormat" name="reportFormat" required>
+                                        <option value="">Select Format</option>
+                                        <option value="PDF">PDF</option>
+                                        <option value="EXCEL">Excel</option>
+                                        <option value="CSV">CSV</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="fromDate" class="form-label">From Date</label>
+                                    <input type="date" class="form-control" id="fromDate" name="fromDate" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="toDate" class="form-label">To Date</label>
+                                    <input type="date" class="form-control" id="toDate" name="toDate" required>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3" id="branchSelectorRow">
+                                <div class="col-md-6">
+                                    <label for="branchId" class="form-label">Branch</label>
+                                    <select class="form-select" id="branchId" name="branchId">
+                                        <option value="">All Branches</option>
+                                        <option th:each="branch : ${branches}" th:value="${branch.id}" th:text="${branch.name}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <label for="reportName" class="form-label">Report Name</label>
+                                    <input type="text" class="form-control" id="reportName" name="reportName" required>
+                                    <small class="text-muted">Enter a descriptive name for this report</small>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <label for="reportDescription" class="form-label">Description (Optional)</label>
+                                    <textarea class="form-control" id="reportDescription" name="reportDescription" rows="3"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="button" class="btn btn-secondary me-md-2" onclick="window.location.href='/banker/reports'">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-file-alt me-1"></i> Generate Report
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/auth.js}"></script>
+    <script th:src="@{/js/dashboard-auth.js}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('generateReportForm');
+            const errorAlert = document.getElementById('errorAlert');
+            const successAlert = document.getElementById('successAlert');
+            const reportTypeSelect = document.getElementById('reportType');
+            const branchSelectorRow = document.getElementById('branchSelectorRow');
+            
+            // Set default dates
+            const today = new Date();
+            const lastMonth = new Date();
+            lastMonth.setMonth(today.getMonth() - 1);
+            
+            document.getElementById('fromDate').valueAsDate = lastMonth;
+            document.getElementById('toDate').valueAsDate = today;
+            
+            // Show/hide branch selector based on report type
+            reportTypeSelect.addEventListener('change', function() {
+                const reportType = this.value;
+                if (reportType === 'BRANCH' || reportType === 'SUMMARY') {
+                    branchSelectorRow.style.display = 'none';
+                } else {
+                    branchSelectorRow.style.display = '';
+                }
+                
+                // Auto-generate report name
+                const reportName = document.getElementById('reportName');
+                const fromDate = new Date(document.getElementById('fromDate').value);
+                const toDate = new Date(document.getElementById('toDate').value);
+                
+                const fromDateStr = fromDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                const toDateStr = toDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+                
+                let reportTypeName = '';
+                switch(reportType) {
+                    case 'TRANSACTION': reportTypeName = 'Transaction'; break;
+                    case 'ACCOUNT': reportTypeName = 'Account'; break;
+                    case 'LOAN': reportTypeName = 'Loan'; break;
+                    case 'BRANCH': reportTypeName = 'Branch'; break;
+                    case 'USER': reportTypeName = 'User'; break;
+                    case 'SUMMARY': reportTypeName = 'Summary'; break;
+                    default: reportTypeName = ''; break;
+                }
+                
+                if (reportTypeName) {
+                    reportName.value = `${reportTypeName} Report - ${fromDateStr} to ${toDateStr}`;
+                }
+            });
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Hide alerts
+                errorAlert.classList.add('d-none');
+                successAlert.classList.add('d-none');
+                
+                // Get form data
+                const reportData = {
+                    reportType: document.getElementById('reportType').value,
+                    reportFormat: document.getElementById('reportFormat').value,
+                    fromDate: document.getElementById('fromDate').value,
+                    toDate: document.getElementById('toDate').value,
+                    branchId: document.getElementById('branchId').value,
+                    reportName: document.getElementById('reportName').value,
+                    reportDescription: document.getElementById('reportDescription').value
+                };
+                
+                // Send API request
+                fetch('/api/banker/reports/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    body: JSON.stringify(reportData)
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Failed to generate report');
+                        });
+                    }
+                })
+                .then(data => {
+                    // Show success message
+                    successAlert.textContent = 'Report generated successfully!';
+                    successAlert.classList.remove('d-none');
+                    
+                    // Redirect after delay
+                    setTimeout(() => {
+                        window.location.href = '/banker/reports';
+                    }, 2000);
+                })
+                .catch(error => {
+                    // Show error message
+                    errorAlert.textContent = error.message;
+                    errorAlert.classList.remove('d-none');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

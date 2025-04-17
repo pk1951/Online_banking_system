@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Settings - TRUE Bank</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+            color: white;
+        }
+        
+        .sidebar-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-link:hover, .sidebar-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-link i {
+            margin-right: 10px;
+        }
+        
+        .content-area {
+            padding: 20px;
+        }
+        
+        .nav-pills .nav-link.active {
+            background-color: #0d6efd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="pt-4 pb-3 text-center">
+                    <h5>TRUE Bank</h5>
+                    <p>Banker Administration</p>
+                </div>
+                <hr>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/dashboard">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/branches">
+                            <i class="fas fa-building"></i> Branches
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/managers">
+                            <i class="fas fa-user-tie"></i> Managers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/users">
+                            <i class="fas fa-users"></i> Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/reports">
+                            <i class="fas fa-chart-bar"></i> Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link active" href="/banker/settings">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                    </li>
+                    <li class="nav-item mt-5">
+                        <a class="sidebar-link text-danger logout-btn" href="#">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">System Settings</h1>
+                </div>
+                
+                <!-- Settings Tabs -->
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card mb-4">
+                            <div class="card-body p-0">
+                                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                    <button class="nav-link active text-start" id="v-pills-general-tab" data-bs-toggle="pill" data-bs-target="#v-pills-general" type="button" role="tab" aria-controls="v-pills-general" aria-selected="true">
+                                        <i class="fas fa-sliders-h me-2"></i> General Settings
+                                    </button>
+                                    <button class="nav-link text-start" id="v-pills-security-tab" data-bs-toggle="pill" data-bs-target="#v-pills-security" type="button" role="tab" aria-controls="v-pills-security" aria-selected="false">
+                                        <i class="fas fa-shield-alt me-2"></i> Security Settings
+                                    </button>
+                                    <button class="nav-link text-start" id="v-pills-notification-tab" data-bs-toggle="pill" data-bs-target="#v-pills-notification" type="button" role="tab" aria-controls="v-pills-notification" aria-selected="false">
+                                        <i class="fas fa-bell me-2"></i> Notification Settings
+                                    </button>
+                                    <button class="nav-link text-start" id="v-pills-api-tab" data-bs-toggle="pill" data-bs-target="#v-pills-api" type="button" role="tab" aria-controls="v-pills-api" aria-selected="false">
+                                        <i class="fas fa-plug me-2"></i> API Integration
+                                    </button>
+                                    <button class="nav-link text-start" id="v-pills-backup-tab" data-bs-toggle="pill" data-bs-target="#v-pills-backup" type="button" role="tab" aria-controls="v-pills-backup" aria-selected="false">
+                                        <i class="fas fa-database me-2"></i> Backup & Restore
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="tab-content" id="v-pills-tabContent">
+                                    <!-- General Settings -->
+                                    <div class="tab-pane fade show active" id="v-pills-general" role="tabpanel" aria-labelledby="v-pills-general-tab">
+                                        <h4 class="mb-4">General Settings</h4>
+                                        <form id="generalSettingsForm">
+                                            <div class="alert alert-success d-none" id="generalSuccessAlert"></div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="bankName" class="form-label">Bank Name</label>
+                                                <input type="text" class="form-control" id="bankName" value="TRUE Bank" required>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="supportEmail" class="form-label">Support Email</label>
+                                                <input type="email" class="form-control" id="supportEmail" value="support@truebank.com" required>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="supportPhone" class="form-label">Support Phone</label>
+                                                <input type="text" class="form-control" id="supportPhone" value="1800-TRUE-BANK" required>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="dateFormat" class="form-label">Date Format</label>
+                                                <select class="form-select" id="dateFormat">
+                                                    <option value="dd/MM/yyyy">DD/MM/YYYY</option>
+                                                    <option value="MM/dd/yyyy">MM/DD/YYYY</option>
+                                                    <option value="yyyy-MM-dd">YYYY-MM-DD</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="timezone" class="form-label">Timezone</label>
+                                                <select class="form-select" id="timezone">
+                                                    <option value="Asia/Kolkata">Asia/Kolkata (IST)</option>
+                                                    <option value="UTC">UTC</option>
+                                                    <option value="America/New_York">America/New_York (EST)</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="maintenanceMode" class="form-check-label">Maintenance Mode</label>
+                                                <div class="form-check form-switch mt-2">
+                                                    <input class="form-check-input" type="checkbox" id="maintenanceMode">
+                                                    <label class="form-check-label" for="maintenanceMode">Enable Maintenance Mode</label>
+                                                </div>
+                                                <small class="text-muted">When enabled, only banker accounts can access the system.</small>
+                                            </div>
+                                            
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fas fa-save me-1"></i> Save Changes
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                    <!-- Security Settings -->
+                                    <div class="tab-pane fade" id="v-pills-security" role="tabpanel" aria-labelledby="v-pills-security-tab">
+                                        <h4 class="mb-4">Security Settings</h4>
+                                        <form id="securitySettingsForm">
+                                            <div class="alert alert-success d-none" id="securitySuccessAlert"></div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="sessionTimeout" class="form-label">Session Timeout (minutes)</label>
+                                                <input type="number" class="form-control" id="sessionTimeout" value="30" min="5" max="120" required>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="passwordPolicy" class="form-label">Password Policy</label>
+                                                <select class="form-select" id="passwordPolicy">
+                                                    <option value="STANDARD">Standard (8+ chars, 1 uppercase, 1 number)</option>
+                                                    <option value="STRONG">Strong (10+ chars, uppercase, lowercase, number, special)</option>
+                                                    <option value="CUSTOM">Custom</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="twoFactorAuth" class="form-check-label">Two-Factor Authentication</label>
+                                                <div class="form-check form-switch mt-2">
+                                                    <input class="form-check-input" type="checkbox" id="twoFactorAuth" checked>
+                                                    <label class="form-check-label" for="twoFactorAuth">Require Two-Factor Authentication</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="loginAttempts" class="form-label">Max Login Attempts</label>
+                                                <input type="number" class="form-control" id="loginAttempts" value="5" min="3" max="10" required>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="ipRestriction" class="form-check-label">IP Restriction</label>
+                                                <div class="form-check form-switch mt-2">
+                                                    <input class="form-check-input" type="checkbox" id="ipRestriction">
+                                                    <label class="form-check-label" for="ipRestriction">Enable IP Restriction</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fas fa-save me-1"></i> Save Changes
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                    <!-- Notification Settings -->
+                                    <div class="tab-pane fade" id="v-pills-notification" role="tabpanel" aria-labelledby="v-pills-notification-tab">
+                                        <h4 class="mb-4">Notification Settings</h4>
+                                        <form id="notificationSettingsForm">
+                                            <div class="alert alert-success d-none" id="notificationSuccessAlert"></div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Email Notifications</label>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="emailLoginNotification" checked>
+                                                    <label class="form-check-label" for="emailLoginNotification">Login Notifications</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="emailTransactionNotification" checked>
+                                                    <label class="form-check-label" for="emailTransactionNotification">Transaction Notifications</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="emailLoanNotification" checked>
+                                                    <label class="form-check-label" for="emailLoanNotification">Loan Status Notifications</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">SMS Notifications</label>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="smsLoginNotification" checked>
+                                                    <label class="form-check-label" for="smsLoginNotification">Login Notifications</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="smsTransactionNotification" checked>
+                                                    <label class="form-check-label" for="smsTransactionNotification">Transaction Notifications</label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="smsLoanNotification">
+                                                    <label class="form-check-label" for="smsLoanNotification">Loan Status Notifications</label>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="emailProvider" class="form-label">Email Service Provider</label>
+                                                <select class="form-select" id="emailProvider">
+                                                    <option value="SMTP">SMTP Server</option>
+                                                    <option value="SENDGRID">SendGrid</option>
+                                                    <option value="MAILGUN">Mailgun</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fas fa-save me-1"></i> Save Changes
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                    <!-- API Integration -->
+                                    <div class="tab-pane fade" id="v-pills-api" role="tabpanel" aria-labelledby="v-pills-api-tab">
+                                        <h4 class="mb-4">API Integration</h4>
+                                        <form id="apiSettingsForm">
+                                            <div class="alert alert-success d-none" id="apiSuccessAlert"></div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="supabaseUrl" class="form-label">Supabase URL</label>
+                                                <input type="text" class="form-control" id="supabaseUrl" value="https://vsosdonidiggbfydvjax.supabase.co" required>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="supabaseKey" class="form-label">Supabase Key</label>
+                                                <div class="input-group">
+                                                    <input type="password" class="form-control" id="supabaseKey" value="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZzb3Nkb25pZGlnZ2JmeWR2amF4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MTk4OTAsImV4cCI6MjA2MDI5NTg5MH0.Y37SFIt62sMLjdDR0zWvXka5MG9w_eeITbINI-FV96E" required>
+                                                    <button class="btn btn-outline-secondary" type="button" id="toggleKeyBtn">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="smsApiKey" class="form-label">SMS API Key</label>
+                                                <div class="input-group">
+                                                    <input type="password" class="form-control" id="smsApiKey" value="" placeholder="Enter SMS API Key">
+                                                    <button class="btn btn-outline-secondary" type="button" id="toggleSmsKeyBtn">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label for="paymentGateway" class="form-label">Payment Gateway</label>
+                                                <select class="form-select" id="paymentGateway">
+                                                    <option value="NONE">None</option>
+                                                    <option value="RAZORPAY">Razorpay</option>
+                                                    <option value="STRIPE">Stripe</option>
+                                                    <option value="PAYPAL">PayPal</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                <button type="button" class="btn btn-secondary me-md-2" id="testConnectionBtn">
+                                                    <i class="fas fa-plug me-1"></i> Test Connection
+                                                </button>
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fas fa-save me-1"></i> Save Changes
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    
+                                    <!-- Backup & Restore -->
+                                    <div class="tab-pane fade" id="v-pills-backup" role="tabpanel" aria-labelledby="v-pills-backup-tab">
+                                        <h4 class="mb-4">Backup & Restore</h4>
+                                        
+                                        <div class="card mb-4">
+                                            <div class="card-header">
+                                                <h5 class="mb-0">Database Backup</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>Create a backup of the entire database or specific tables.</p>
+                                                <div class="mb-3">
+                                                    <label for="backupType" class="form-label">Backup Type</label>
+                                                    <select class="form-select" id="backupType">
+                                                        <option value="FULL">Full Backup</option>
+                                                        <option value="USERS">Users Only</option>
+                                                        <option value="TRANSACTIONS">Transactions Only</option>
+                                                        <option value="ACCOUNTS">Accounts Only</option>
+                                                    </select>
+                                                </div>
+                                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                    <button type="button" class="btn btn-primary" id="createBackupBtn">
+                                                        <i class="fas fa-download me-1"></i> Create Backup
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="mb-0">Restore Database</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <p class="text-danger">Warning: Restoring a backup will overwrite existing data. This action cannot be undone.</p>
+                                                <div class="mb-3">
+                                                    <label for="backupFile" class="form-label">Backup File</label>
+                                                    <input class="form-control" type="file" id="backupFile">
+                                                </div>
+                                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                                    <button type="button" class="btn btn-danger" id="restoreBackupBtn">
+                                                        <i class="fas fa-upload me-1"></i> Restore Backup
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/auth.js}"></script>
+    <script th:src="@{/js/dashboard-auth.js}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle password visibility
+            document.getElementById('toggleKeyBtn').addEventListener('click', function() {
+                const keyInput = document.getElementById('supabaseKey');
+                const icon = this.querySelector('i');
+                
+                if (keyInput.type === 'password') {
+                    keyInput.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    keyInput.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+            
+            document.getElementById('toggleSmsKeyBtn').addEventListener('click', function() {
+                const keyInput = document.getElementById('smsApiKey');
+                const icon = this.querySelector('i');
+                
+                if (keyInput.type === 'password') {
+                    keyInput.type = 'text';
+                    icon.classList.remove('fa-eye');
+                    icon.classList.add('fa-eye-slash');
+                } else {
+                    keyInput.type = 'password';
+                    icon.classList.remove('fa-eye-slash');
+                    icon.classList.add('fa-eye');
+                }
+            });
+            
+            // Form submissions
+            document.getElementById('generalSettingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const successAlert = document.getElementById('generalSuccessAlert');
+                successAlert.textContent = 'General settings saved successfully!';
+                successAlert.classList.remove('d-none');
+                
+                setTimeout(() => {
+                    successAlert.classList.add('d-none');
+                }, 3000);
+            });
+            
+            document.getElementById('securitySettingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const successAlert = document.getElementById('securitySuccessAlert');
+                successAlert.textContent = 'Security settings saved successfully!';
+                successAlert.classList.remove('d-none');
+                
+                setTimeout(() => {
+                    successAlert.classList.add('d-none');
+                }, 3000);
+            });
+            
+            document.getElementById('notificationSettingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const successAlert = document.getElementById('notificationSuccessAlert');
+                successAlert.textContent = 'Notification settings saved successfully!';
+                successAlert.classList.remove('d-none');
+                
+                setTimeout(() => {
+                    successAlert.classList.add('d-none');
+                }, 3000);
+            });
+            
+            document.getElementById('apiSettingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const successAlert = document.getElementById('apiSuccessAlert');
+                successAlert.textContent = 'API settings saved successfully!';
+                successAlert.classList.remove('d-none');
+                
+                setTimeout(() => {
+                    successAlert.classList.add('d-none');
+                }, 3000);
+            });
+            
+            // Test connection button
+            document.getElementById('testConnectionBtn').addEventListener('click', function() {
+                const successAlert = document.getElementById('apiSuccessAlert');
+                successAlert.textContent = 'Connection test successful!';
+                successAlert.classList.remove('d-none');
+                
+                setTimeout(() => {
+                    successAlert.classList.add('d-none');
+                }, 3000);
+            });
+            
+            // Backup and restore buttons
+            document.getElementById('createBackupBtn').addEventListener('click', function() {
+                alert('Backup created successfully!');
+            });
+            
+            document.getElementById('restoreBackupBtn').addEventListener('click', function() {
+                const backupFile = document.getElementById('backupFile').value;
+                if (!backupFile) {
+                    alert('Please select a backup file to restore.');
+                    return;
+                }
+                
+                if (confirm('Are you sure you want to restore this backup? This action cannot be undone.')) {
+                    alert('Backup restored successfully!');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

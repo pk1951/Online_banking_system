@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw Money - TRUE Bank</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+            color: white;
+        }
+        
+        .sidebar-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            padding: 10px 15px;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-link:hover, .sidebar-link.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-link i {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="pt-4 pb-3 text-center">
+                    <h5>TRUE Bank</h5>
+                    <p>Welcome, <span th:text="${user.firstName + ' ' + user.lastName}">User</span></p>
+                </div>
+                <hr>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/dashboard">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/accounts">
+                            <i class="bi bi-credit-card"></i> My Accounts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/transactions">
+                            <i class="bi bi-arrow-left-right"></i> Transactions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/transfer">
+                            <i class="bi bi-send"></i> Fund Transfer
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/statements">
+                            <i class="bi bi-file-earmark-text"></i> Statements
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/loans">
+                            <i class="bi bi-cash-coin"></i> Loans
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/user/profile">
+                            <i class="bi bi-person-circle"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item mt-3">
+                        <a class="sidebar-link" href="/user/deposit">
+                            <i class="bi bi-plus-circle"></i> Deposit
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link active" href="/user/withdraw">
+                            <i class="bi bi-dash-circle"></i> Withdraw
+                        </a>
+                    </li>
+                    <li class="nav-item mt-5">
+                        <a class="sidebar-link text-danger" href="/logout">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Withdraw Money</h1>
+                </div>
+                
+                <!-- Alert Messages -->
+                <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${successMessage}">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span th:text="${successMessage}">Withdrawal successful!</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${errorMessage}">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${errorMessage}">Error processing withdrawal.</span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <!-- Withdrawal Form -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Withdrawal Form</h5>
+                    </div>
+                    <div class="card-body">
+                        <form action="/user/withdraw" method="post" class="row g-3">
+                            <div class="col-md-6">
+                                <label for="accountId" class="form-label">Select Account</label>
+                                <select class="form-select" id="accountId" name="accountId" required>
+                                    <option value="" selected disabled>Choose account to withdraw from</option>
+                                    <option th:each="account : ${accounts}" 
+                                            th:value="${account.id}" 
+                                            th:text="${account.accountType + ' - ' + account.accountNumber + ' (Balance: ₹' + #numbers.formatDecimal(account.balance, 0, 'COMMA', 2, 'POINT') + ')'}">
+                                        Savings - TRUE0010001 (Balance: ₹10,000.00)
+                                    </option>
+                                </select>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label for="amount" class="form-label">Amount (₹)</label>
+                                <input type="number" class="form-control" id="amount" name="amount" placeholder="Enter amount to withdraw" min="1" step="0.01" required>
+                                <div class="form-text">Minimum withdrawal amount is ₹1.00</div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <label for="description" class="form-label">Description (Optional)</label>
+                                <textarea class="form-control" id="description" name="description" rows="2" placeholder="Enter reason for withdrawal"></textarea>
+                            </div>
+                            
+                            <!-- Hidden field for withdrawal method -->
+                            <input type="hidden" id="withdrawalMethod" name="withdrawalMethod" value="CASH">
+                            
+                            <div class="col-12 d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                <a href="/user/dashboard" class="btn btn-outline-secondary me-md-2">Cancel</a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-arrow-down-circle me-1"></i> Withdraw Money
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/auth.js}"></script>
+    <script th:src="@{/js/dashboard-auth.js}"></script>
+</body>
+</html> 

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - TRUE Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 50px;
+        }
+        .error-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            padding: 40px 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .error-icon {
+            font-size: 80px;
+            color: #ffc107;
+            margin-bottom: 20px;
+        }
+        .error-heading {
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        .error-message {
+            color: #6c757d;
+            margin-bottom: 30px;
+        }
+        .btn-primary {
+            background-color: #0d6efd;
+            border: none;
+            padding: 10px 30px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error-container">
+            <div class="error-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" fill="currentColor" class="bi bi-exclamation-circle" viewBox="0 0 16 16">
+                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                    <path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/>
+                </svg>
+            </div>
+            <h1 class="error-heading">Something Went Wrong</h1>
+            <p class="error-message">An unexpected error occurred while processing your request. Our technical team has been notified.</p>
+            <div class="d-grid gap-2 d-md-block">
+                <a href="/" class="btn btn-primary me-md-2">Go to Home</a>
+                <button class="btn btn-outline-secondary" onclick="window.history.back()">Go Back</button>
+            </div>
+            <p class="mt-4 small text-muted">If the problem persists, please contact our support team.</p>
+        </div>
+    </div>
+</body>
+</html> 

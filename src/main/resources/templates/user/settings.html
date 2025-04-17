@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings - TRUE Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .sidebar {
+            min-height: calc(100vh - 56px);
+            background-color: #343a40;
+        }
+        .sidebar a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            display: block;
+        }
+        .sidebar a:hover, .sidebar a.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .settings-card {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">TRUE Bank</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logout">Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 sidebar py-3 d-md-block bg-dark">
+                <div class="text-center mb-4">
+                    <h6 class="text-white mt-2" th:text="${user != null ? user.firstName + ' ' + user.lastName : 'User'}">User Name</h6>
+                </div>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/dashboard">
+                            <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/accounts">
+                            <i class="bi bi-wallet2 me-2"></i> My Accounts
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/transactions">
+                            <i class="bi bi-arrow-left-right me-2"></i> Transactions
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/transfer">
+                            <i class="bi bi-send me-2"></i> Fund Transfer
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/loans">
+                            <i class="bi bi-cash-coin me-2"></i> Loans
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/user/profile">
+                            <i class="bi bi-person-circle me-2"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/user/settings">
+                            <i class="bi bi-gear me-2"></i> Settings
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-9 col-lg-10 py-4">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Account Settings</h2>
+                </div>
+
+                <div class="card settings-card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Notification Preferences</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="notificationForm">
+                            <div class="mb-3">
+                                <h6>Email Notifications</h6>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="emailTransactions" checked>
+                                    <label class="form-check-label" for="emailTransactions">Transaction Alerts</label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="emailStatements" checked>
+                                    <label class="form-check-label" for="emailStatements">Monthly Statements</label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="emailPromotions">
+                                    <label class="form-check-label" for="emailPromotions">Promotional Offers</label>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h6>SMS Notifications</h6>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="smsTransactions" checked>
+                                    <label class="form-check-label" for="smsTransactions">Transaction Alerts</label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="smsLowBalance">
+                                    <label class="form-check-label" for="smsLowBalance">Low Balance Alerts</label>
+                                </div>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="smsLogin" checked>
+                                    <label class="form-check-label" for="smsLogin">Login Alerts</label>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-primary">Save Notification Preferences</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card settings-card mb-4">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0">Security Settings</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="securityForm">
+                            <div class="mb-3">
+                                <h6>Two-Factor Authentication</h6>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="enable2fa" checked>
+                                    <label class="form-check-label" for="enable2fa">Enable Two-Factor Authentication</label>
+                                    <div class="form-text">Receive a verification code via SMS when logging in from a new device.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <h6>Login Attempts</h6>
+                                <div class="form-check form-switch mb-2">
+                                    <input class="form-check-input" type="checkbox" id="trackLogins" checked>
+                                    <label class="form-check-label" for="trackLogins">Track Login Attempts</label>
+                                    <div class="form-text">Keep a record of all login attempts to your account.</div>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-danger">Save Security Settings</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card settings-card">
+                    <div class="card-header bg-secondary text-white">
+                        <h5 class="mb-0">Display Preferences</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="displayForm">
+                            <div class="mb-3">
+                                <label for="dateFormat" class="form-label">Date Format</label>
+                                <select class="form-select" id="dateFormat">
+                                    <option value="dd/MM/yyyy">DD/MM/YYYY (31/12/2023)</option>
+                                    <option value="MM/dd/yyyy">MM/DD/YYYY (12/31/2023)</option>
+                                    <option value="yyyy-MM-dd">YYYY-MM-DD (2023-12-31)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="timezone" class="form-label">Timezone</label>
+                                <select class="form-select" id="timezone">
+                                    <option value="UTC">UTC (Coordinated Universal Time)</option>
+                                    <option value="IST">IST (Indian Standard Time)</option>
+                                    <option value="EST">EST (Eastern Standard Time)</option>
+                                    <option value="PST">PST (Pacific Standard Time)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="currency" class="form-label">Default Currency Display</label>
+                                <select class="form-select" id="currency">
+                                    <option value="INR">Indian Rupee (₹)</option>
+                                    <option value="USD">US Dollar ($)</option>
+                                    <option value="EUR">Euro (€)</option>
+                                    <option value="GBP">British Pound (£)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-secondary">Save Display Preferences</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Add event listeners for form submissions
+        document.getElementById('notificationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Notification preferences saved successfully!');
+        });
+        
+        document.getElementById('securityForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Security settings saved successfully!');
+        });
+        
+        document.getElementById('displayForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Display preferences saved successfully!');
+        });
+    </script>
+</body>
+</html> 

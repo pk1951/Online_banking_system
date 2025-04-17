@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch Operation Error - TRUE Bank</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .error-container {
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .error-icon {
+            font-size: 50px;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+                <div class="pt-4 pb-3 text-center">
+                    <h5>TRUE Bank</h5>
+                    <p>Banker Administration</p>
+                </div>
+                <hr>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/dashboard">
+                            <i class="fas fa-tachometer-alt"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link active" href="/banker/branches">
+                            <i class="fas fa-building"></i> Branches
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/managers">
+                            <i class="fas fa-user-tie"></i> Managers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/users">
+                            <i class="fas fa-users"></i> Users
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/reports">
+                            <i class="fas fa-chart-bar"></i> Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="sidebar-link" href="/banker/settings">
+                            <i class="fas fa-cog"></i> Settings
+                        </a>
+                    </li>
+                    <li class="nav-item mt-5">
+                        <a class="sidebar-link text-danger logout-btn" href="#">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <!-- Main Content -->
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">Branch Operation Error</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a href="/banker/branches" class="btn btn-sm btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back to Branches
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Error Content -->
+                <div class="card">
+                    <div class="card-header bg-danger text-white">
+                        <h5 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i> Error</h5>
+                    </div>
+                    <div class="card-body error-container">
+                        <div class="error-icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <h3>Branch Operation Failed</h3>
+                        <p class="lead text-danger" th:text="${errorMessage}">Error details will appear here.</p>
+                        
+                        <div class="mt-4">
+                            <div class="alert alert-info">
+                                <h5>Troubleshooting Tips:</h5>
+                                <ul class="text-start">
+                                    <li>Make sure you are logged in as a banker with proper permissions</li>
+                                    <li>Check that all required fields are filled out correctly</li>
+                                    <li>Ensure the branch code is unique (3 digits)</li>
+                                    <li>Verify that phone numbers contain 10-12 digits only</li>
+                                    <li>Try clearing your browser cache and cookies</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <a href="/banker/branches" class="btn btn-primary me-2">
+                                <i class="fas fa-list me-1"></i> View All Branches
+                            </a>
+                            <a href="/banker/branches/create" class="btn btn-success">
+                                <i class="fas fa-plus me-1"></i> Try Creating Again
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/js/dashboard-auth.js}"></script>
+</body>
+</html> 

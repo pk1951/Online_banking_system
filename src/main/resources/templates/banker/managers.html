@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch Managers - True Bank</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        .sidebar {
+            min-height: 100vh;
+            background-color: #343a40;
+        }
+        .content {
+            padding: 20px;
+        }
+        .nav-link {
+            color: rgba(255, 255, 255, 0.75);
+        }
+        .nav-link:hover, .nav-link.active {
+            color: white;
+        }
+        .manager-card {
+            transition: transform 0.3s;
+        }
+        .manager-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 p-0 sidebar">
+                <div class="d-flex flex-column p-3 text-white">
+                    <a href="/banker/dashboard" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+                        <i class="fas fa-university me-2"></i>
+                        <span class="fs-4">TRUE Bank</span>
+                    </a>
+                    <hr>
+                    <ul class="nav nav-pills flex-column mb-auto">
+                        <li class="nav-item">
+                            <a href="/banker/dashboard" class="nav-link">
+                                <i class="fas fa-tachometer-alt me-2"></i> Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/banker/branches" class="nav-link">
+                                <i class="fas fa-code-branch me-2"></i> Branches
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/banker/managers" class="nav-link active">
+                                <i class="fas fa-user-tie me-2"></i> Managers
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/banker/users" class="nav-link">
+                                <i class="fas fa-users me-2"></i> Users
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/banker/reports" class="nav-link">
+                                <i class="fas fa-chart-bar me-2"></i> Reports
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/banker/settings" class="nav-link">
+                                <i class="fas fa-cog me-2"></i> Settings
+                            </a>
+                        </li>
+                    </ul>
+                    <hr>
+                    <a href="/logout" class="nav-link text-white">
+                        <i class="fas fa-sign-out-alt me-2"></i> Logout
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="col-md-10 content">
+                <!-- Header with title and actions -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2><i class="fas fa-user-tie me-2"></i> Branch Managers</h2>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                        <a href="/banker/managers/create" class="btn btn-sm btn-primary">
+                            <i class="fas fa-plus-circle me-1"></i> Create Manager
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Alerts for success or error messages -->
+                <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i> <span th:text="${successMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i> <span th:text="${errorMessage}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                
+                <!-- Managers List -->
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <div th:if="${#lists.isEmpty(managers)}" class="text-center p-5">
+                            <i class="fas fa-user-tie fa-3x text-muted mb-3"></i>
+                            <p class="lead">No managers found</p>
+                            <a href="/banker/managers/create" class="btn btn-primary">
+                                <i class="fas fa-plus-circle me-1"></i> Create Manager
+                            </a>
+                        </div>
+                        
+                        <div th:unless="${#lists.isEmpty(managers)}" class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Branch</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="manager : ${managers}">
+                                        <td>
+                                            <div class="d-flex align-items-center">
+                                                <div class="avatar avatar-sm bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center">
+                                                    <span class="text-white" th:text="${#strings.substring(manager.firstName,0,1) + #strings.substring(manager.lastName,0,1)}"></span>
+                                                </div>
+                                                <div>
+                                                    <span th:text="${manager.firstName + ' ' + manager.lastName}"></span>
+                                                    <small class="d-block text-muted" th:text="${'@' + manager.username}"></small>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td th:text="${manager.email}"></td>
+                                        <td th:text="${manager.phoneNumber}"></td>
+                                        <td>
+                                            <span th:if="${manager.branch != null}" class="badge bg-info" th:text="${manager.branch.name}"></span>
+                                            <span th:unless="${manager.branch != null}" class="badge bg-secondary">Not Assigned</span>
+                                        </td>
+                                        <td>
+                                            <span th:if="${manager.isActive}" class="badge bg-success">Active</span>
+                                            <span th:unless="${manager.isActive}" class="badge bg-danger">Inactive</span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-sm">
+                                                <a th:href="@{'/banker/managers/' + ${manager.id}}" class="btn btn-outline-primary">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <a th:href="@{'/banker/managers/' + ${manager.id} + '/edit'}" class="btn btn-outline-secondary">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error - TRUE Bank</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .error-container {
+            padding: 50px 20px;
+            text-align: center;
+        }
+        .error-icon {
+            font-size: 50px;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card mt-5 mb-5">
+                    <div class="card-header bg-danger text-white">
+                        <h4><i class="fas fa-exclamation-triangle me-2"></i> Error</h4>
+                    </div>
+                    <div class="card-body error-container">
+                        <div class="error-icon">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                        <h3>Something went wrong!</h3>
+                        <p class="lead" th:text="${errorMessage != null ? errorMessage : 'An unexpected error occurred. Please try again later.'}"></p>
+                        
+                        <div class="mt-4">
+                            <a href="/" class="btn btn-primary me-2">
+                                <i class="fas fa-home me-1"></i> Return to Home
+                            </a>
+                            <a href="javascript:history.back()" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left me-1"></i> Go Back
+                            </a>
+                        </div>
+                        
+                        <!-- Technical Error Details (Only shown in development) -->
+                        <div class="mt-5 text-start" th:if="${stackTrace != null}">
+                            <div class="accordion" id="errorAccordion">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingDetails">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDetails" aria-expanded="false" aria-controls="collapseDetails">
+                                            Technical Details
+                                        </button>
+                                    </h2>
+                                    <div id="collapseDetails" class="accordion-collapse collapse" aria-labelledby="headingDetails" data-bs-parent="#errorAccordion">
+                                        <div class="accordion-body">
+                                            <pre class="bg-light p-3"><code th:each="ste : ${stackTrace}" th:text="${ste}"></code></pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

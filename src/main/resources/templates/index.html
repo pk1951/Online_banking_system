@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRUE Bank - Secure Online Banking</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/5.3.0/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/webjars/font-awesome/6.4.0/css/all.min.css}">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        .hero-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('/images/bank-hero.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+        
+        .feature-card {
+            transition: transform 0.3s ease;
+            margin-bottom: 30px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #0d6efd;
+        }
+        
+        .testimonial-section {
+            background-color: #f8f9fa;
+            padding: 80px 0;
+        }
+        
+        .testimonial-card {
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .testimonial-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 20px;
+        }
+        
+        .cursor-animation {
+            display: inline-block;
+            width: 3px;
+            height: 20px;
+            background-color: #0d6efd;
+            margin-left: 5px;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .typing-text {
+            overflow: hidden;
+            white-space: nowrap;
+            margin: 0 auto;
+            animation: typing 3.5s steps(40, end);
+        }
+        
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <strong>TRUE</strong> Bank
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/services">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact Us</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="/login" class="btn btn-outline-light me-2">Login</a>
+                    <a href="/register" class="btn btn-light">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <h1 class="display-4 mb-4 typing-text">Welcome to TRUE Bank</h1>
+                    <p class="lead mb-5">Secure, reliable, and innovative banking solutions for a better financial future.</p>
+                    <div>
+                        <a href="/register" class="btn btn-primary btn-lg me-3">Get Started</a>
+                        <a href="/about" class="btn btn-outline-light btn-lg">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-5">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2>Why Choose TRUE Bank?</h2>
+                <p class="lead text-muted">Experience the difference with our innovative banking solutions</p>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card feature-card h-100 text-center p-4">
+                        <div class="card-body">
+                            <i class="fas fa-shield-alt feature-icon"></i>
+                            <h4 class="card-title">Secure Banking</h4>
+                            <p class="card-text">Bank with confidence knowing your data and money are protected by state-of-the-art security systems.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card h-100 text-center p-4">
+                        <div class="card-body">
+                            <i class="fas fa-mobile-alt feature-icon"></i>
+                            <h4 class="card-title">24/7 Online Access</h4>
+                            <p class="card-text">Manage your accounts, transfer funds, and pay bills anytime, anywhere with our digital banking platform.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card feature-card h-100 text-center p-4">
+                        <div class="card-body">
+                            <i class="fas fa-chart-line feature-icon"></i>
+                            <h4 class="card-title">Competitive Rates</h4>
+                            <p class="card-text">Enjoy competitive interest rates on savings accounts and affordable loan options tailored to your needs.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2>Our Services</h2>
+                <p class="lead text-muted">Comprehensive banking solutions for all your financial needs</p>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-wallet text-primary mb-3" style="font-size: 2rem;"></i>
+                            <h5 class="card-title">Savings Accounts</h5>
+                            <p class="card-text">Grow your savings with competitive interest rates and flexible access options.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-building text-primary mb-3" style="font-size: 2rem;"></i>
+                            <h5 class="card-title">Current Accounts</h5>
+                            <p class="card-text">Manage your daily transactions with ease and convenience.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-piggy-bank text-primary mb-3" style="font-size: 2rem;"></i>
+                            <h5 class="card-title">Fixed Deposits</h5>
+                            <p class="card-text">Secure higher returns with our fixed deposit options for various tenures.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-hand-holding-usd text-primary mb-3" style="font-size: 2rem;"></i>
+                            <h5 class="card-title">Loans</h5>
+                            <p class="card-text">Fulfill your dreams with our range of loan products at attractive interest rates.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonial-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2>What Our Customers Say</h2>
+                <p class="lead text-muted">Hear from our satisfied customers</p>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="testimonial-card bg-white">
+                        <img src="/images/testimonial1.jpg" alt="Customer" class="testimonial-img">
+                        <h5>Rahul Sharma</h5>
+                        <p class="text-muted">Business Owner</p>
+                        <p>"TRUE Bank has been instrumental in helping me grow my business. Their business loan process was quick and hassle-free."</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card bg-white">
+                        <img src="/images/testimonial2.jpg" alt="Customer" class="testimonial-img">
+                        <h5>Priya Patel</h5>
+                        <p class="text-muted">Software Engineer</p>
+                        <p>"The online banking platform is so user-friendly and secure. I can manage all my accounts and investments from anywhere."</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="testimonial-card bg-white">
+                        <img src="/images/testimonial3.jpg" alt="Customer" class="testimonial-img">
+                        <h5>Amit Kumar</h5>
+                        <p class="text-muted">Retired Professor</p>
+                        <p>"The customer service at TRUE Bank is exceptional. They helped me set up my retirement accounts with personalized advice."</p>
+                        <div class="text-warning">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-5 bg-primary text-white">
+        <div class="container text-center">
+            <h2 class="mb-4">Ready to experience better banking?</h2>
+            <p class="lead mb-4">Join thousands of satisfied customers who trust TRUE Bank for their financial needs.</p>
+            <a href="/register" class="btn btn-light btn-lg">Open an Account Today</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h5>TRUE Bank</h5>
+                    <p>Secure, reliable, and innovative banking solutions for a better financial future.</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/" class="text-white">Home</a></li>
+                        <li><a href="/about" class="text-white">About Us</a></li>
+                        <li><a href="/services" class="text-white">Services</a></li>
+                        <li><a href="/contact" class="text-white">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Services</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="/services#savings" class="text-white">Savings Accounts</a></li>
+                        <li><a href="/services#current" class="text-white">Current Accounts</a></li>
+                        <li><a href="/services#fixed-deposits" class="text-white">Fixed Deposits</a></li>
+                        <li><a href="/services#loans" class="text-white">Loans</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Contact Us</h5>
+                    <address>
+                        <p><i class="fas fa-map-marker-alt me-2"></i> 123 Banking Street, Financial District, Mumbai, India</p>
+                        <p><i class="fas fa-phone me-2"></i> +91 1234567890</p>
+                        <p><i class="fas fa-envelope me-2"></i> info@truebank.com</p>
+                    </address>
+                    <div class="social-icons">
+                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; 2025 TRUE Bank. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/webjars/jquery/3.6.4/jquery.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js}"></script>
+    <script>
+        // Dynamic cursor animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const typingText = document.querySelector('.typing-text');
+            const cursor = document.createElement('span');
+            cursor.className = 'cursor-animation';
+            typingText.appendChild(cursor);
+            
+            // Smooth scroll for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
