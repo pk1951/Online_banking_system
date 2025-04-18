@@ -44,10 +44,13 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 
 ### Application Properties ###
-# Uncomment if you don't want to commit your application properties
-# src/main/resources/application.properties
-# src/main/resources/application.yml
+# Exclude application properties files with sensitive information
+src/main/resources/application.properties
+src/main/resources/application.yml
+# But include the template files
+!src/main/resources/application.properties.template
+!src/main/resources/application.yml.template
 
 ### Logs ###
 logs/
-*.log 
+*.log
